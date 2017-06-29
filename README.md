@@ -20,9 +20,19 @@ Official router for HyperApp.
 
 ## Installation
 
+With npm
+
 <pre>
 npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router</a>
 </pre>
+
+or from a CDN
+
+```html
+<script src="https://unpkg.com/@hyperapp/router"></script>
+```
+
+and access the Router from the global scope.
 
 ## Usage
 
