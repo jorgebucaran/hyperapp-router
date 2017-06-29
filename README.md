@@ -6,9 +6,9 @@
 
 Official router for HyperApp.
 
-- [Example](#example)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Example](#example)
 - [API](#api)
     - [state](#state)
         - [params](#params)
@@ -17,34 +17,6 @@ Official router for HyperApp.
         - [go](#go)
     - [events](#events)
         - [route](#route)
-
-## Example
-
-[Try it online](https://hyperapp-router-example.glitch.me/)
-
-```jsx
-app({
-  view: [
-    [
-      "/",
-      (state, actions) =>
-        <div>
-          <h1>Home</h1>
-          <a href="#about">About</a>
-        </div>
-    ],
-    [
-      "/:route",
-      (state, actions) =>
-        <div>
-          <h1>About</h1>
-          <a href="#home">Home</a>
-        </div>
-    ]
-  ],
-  mixins: [Router]
-})
-```
 
 ## Installation
 
@@ -81,6 +53,34 @@ Routes are matched in the order in which they are declared. To use the wildcard 
 | <samp>*</samp>          | Match anything.
 
 To navigate to a different route use [actions.router.go](#go).
+
+## Example
+
+[Try it online](https://hyperapp-router-example.glitch.me/)
+
+```jsx
+app({
+  view: [
+    [
+      "/",
+      (state, actions) =>
+        <div>
+          <h1>Home</h1>
+          <a href="#about">About</a>
+        </div>
+    ],
+    [
+      "/:route",
+      (state, actions) =>
+        <div>
+          <h1>About</h1>
+          <a href="#home">Home</a>
+        </div>
+    ]
+  ],
+  mixins: [Router]
+})
+```
 
 ## API
 
