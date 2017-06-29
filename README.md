@@ -6,18 +6,6 @@
 
 Official router for HyperApp.
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Example](#example)
-- [API](#api)
-    - [state](#state)
-        - [params](#params)
-        - [match](#match)
-    - [actions](#actions)
-        - [go](#go)
-    - [events](#events)
-        - [route](#route)
-
 ## Installation
 
 With npm
