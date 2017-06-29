@@ -1,8 +1,8 @@
 {
   "name": "@hyperapp/router",
   "description": "Official router for HyperApp.",
-  "version": "0.0.0",
-  "main": "dist/hyperapp.router.js",
+  "version": "0.0.1",
+  "main": "dist/router.js",
   "jsnext:main": "src/index.js",
   "module": "src/index.js",
   "license": "MIT",
