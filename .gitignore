@@ -1,0 +1,18 @@
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log*
+yarn.lock
+package-lock.json
+
+# Misc
+sandbox
+node_modules
+coverage
+*.xml
+
+# Dist
+*.gz
+dist/
