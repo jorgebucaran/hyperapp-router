@@ -4,8 +4,7 @@
 [![npm](https://img.shields.io/npm/v/@hyperapp/router.svg)](https://www.npmjs.org/package/hyperapp)
 [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
-@hyperapp/router provides actions and events for routing client-side pages with [HyperApp](https://github.com/hyperapp/hyperapp). For browsers which don't yet support the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History), the router handles transparent translation to the fragment version of the URL.
-
+@hyperapp/router provides actions and events for routing client-side pages with [HyperApp](https://github.com/hyperapp/hyperapp) using [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
 ## Installation
 
 Using [npm](https://npmjs.com):
