@@ -1,6 +1,6 @@
 {
   "name": "@hyperapp/router",
-  "description": "Official router for HyperApp.",
+  "description": "Actions and events for routing client-side pages with HyperApp.",
   "version": "0.0.1",
   "main": "dist/router.js",
   "jsnext:main": "src/index.js",
