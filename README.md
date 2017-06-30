@@ -30,15 +30,7 @@ Then access the router in the global scope as <samp>Router</samp>.
 
 ## Usage
 
-Register the router as a [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/core.md#mixins).
-
-```jsx
-app({
-  mixins: [Router]
-})
-```
-
-Then compose your view as an array of route/view pairs.
+Register the router as a [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/core.md#mixins). Then compose your view as an array of route/view pairs.
 
 ```jsx
 app({
