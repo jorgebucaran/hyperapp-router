@@ -1,5 +1,5 @@
 import { h, app } from "hyperapp"
-import Router from "../src"
+import { Router } from "../src"
 
 const expectHTMLToBe = (body, ...values) =>
   expect(document.body.innerHTML).toBe(
