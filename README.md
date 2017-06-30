@@ -4,31 +4,41 @@
 [![npm](https://img.shields.io/npm/v/@hyperapp/router.svg)](https://www.npmjs.org/package/hyperapp)
 [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
-Official router for HyperApp.
+@hyperapp/router provides actions and events for routing client-side pages with [HyperApp](https://github.com/hyperapp/hyperapp). For browsers which don't yet support the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History), the router handles transparent translation to the fragment version of the URL.
 
 ## Installation
 
-With npm
+Using [npm](https://npmjs.com):
 
 <pre>
 npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router</a>
 </pre>
 
-or from a CDN
+Then setup a [build pipeline](https://github.com/hyperapp/hyperapp/blob/master/docs/getting-started.md#build-pipeline) and import it.
+
+```jsx
+import { Router } from "@hyperapp/router"
+```
+
+Using a CDN:
 
 ```html
 <script src="https://unpkg.com/@hyperapp/router"></script>
 ```
 
-and access the Router from the global scope.
+Then access the router in the global scope as <samp>Router</samp>.
 
 ## Usage
 
+Register the router as a [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/core.md#mixins).
+
 ```jsx
-import Router from "@hyperapp/router"
+app({
+  mixins: [Router]
+})
 ```
 
-The router treats the view as an array of route/view pairs.
+Then compose your view as an array of route/view pairs.
 
 ```jsx
 app({
@@ -120,5 +130,5 @@ Fired when a route is matched.
 
 ## License
 
-MIT. See [LICENSE](LICENSE.md).
+@hyperapp/router is MIT licensed. See [LICENSE](LICENSE.md).
 
