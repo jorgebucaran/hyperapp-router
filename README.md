@@ -33,11 +33,10 @@ Register the router as a [mixin](https://github.com/hyperapp/hyperapp/blob/maste
 
 ```jsx
 app({
-  view: [
+  mixins: [Router([
     ["/", state => <h1>Hi.</h1>]
     ["*", state => <h1>404</h1>],
-  ],
-  mixins: [Router]
+  ])]
 })
 ```
 
@@ -59,7 +58,7 @@ To navigate to a different route use [actions.router.go](#go).
 
 ```jsx
 app({
-  view: [
+  mixins: [Router([
     [
       "/",
       (state, actions) =>
@@ -76,8 +75,7 @@ app({
           <a href="#home">Home</a>
         </div>
     ]
-  ],
-  mixins: [Router]
+  ])]
 })
 ```
 
