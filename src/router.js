@@ -40,7 +40,7 @@ export function Router(app, view) {
         data.replace(
           RegExp(
             route === "*"
-              ? "." + route
+              ? ".*"
               : "^" +
                   route
                     .replace(/\//g, "\\/")
