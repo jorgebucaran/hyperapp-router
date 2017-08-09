@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
-    "hyperapp": "^0.9.3",
+    "hyperapp": "git://github.com/hyperapp/hyperapp.git",
     "jest": "^20.0.4",
     "prettier": "~1.4.1",
     "rollup": "^0.41.6",

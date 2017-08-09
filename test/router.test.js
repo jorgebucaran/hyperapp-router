@@ -1,6 +1,8 @@
 import { h, app } from "hyperapp"
 import { Router } from "../src"
 
+window.requestAnimationFrame = setTimeout
+
 const expectHTMLToBe = (body, ...values) =>
   expect(document.body.innerHTML).toBe(
     body.reduce((a, b, i) => a + values[i - 1] + b).replace(/\s{2,}/g, "")
@@ -18,14 +20,13 @@ beforeEach(() => {
 
 test("/", () => {
   app({
-    view: [["/", state => h("div", {}, "foo")]],
+    view: [["/", state => h("div", {
+      oncreate() {
+        expect(document.body.innerHTML).toBe(`<div>foo</div>`)
+      }
+    }, "foo")]],
     mixins: [Router]
   })
-
-  expectHTMLToBe`
-    <div>
-      foo
-    </div>`
 })
 
 test("*", () => {
@@ -60,15 +61,13 @@ test("routes", () => {
   window.location.pathname = "/foo/bar/baz"
 
   app({
-    view: [["/foo/bar/baz", state => h("div", {}, "foo", "bar", "baz")]],
+    view: [["/foo/bar/baz", state => h("div", {
+      oncreate() {
+        expect(document.body.innerHTML).toBe(`<div>foobarbaz</div>`)
+      }
+    }, "foo", "bar", "baz")]],
     mixins: [Router]
   })
-
-  expectHTMLToBe`
-    <div>
-      foobarbaz
-    </div>
-  `
 })
 
 test("route params", () => {
@@ -79,25 +78,24 @@ test("route params", () => {
       [
         "/:foo/:bar/:baz",
         state =>
-          h(
-            "ul",
-            {},
-            Object.keys(state.router.params).map(key =>
-              h("li", {}, `${key}:${state.router.params[key]}`)
-            )
-          )
+          h("ul", {
+            oncreate() {
+              expect(document.body.innerHTML).toBe(`
+                <ul>
+                  <li>foo:be_ep</li>
+                  <li>bar:bOp</li>
+                  <li>baz:b00p</li>
+                </ul>
+              `)
+            }
+          },
+          Object.keys(state.router.route.params).map(key =>
+            h("li", {}, `${key}:${state.router.route.params[key]}`)
+          ))
       ]
     ],
     mixins: [Router]
   })
-
-  expectHTMLToBe`
-    <ul>
-      <li>foo:be_ep</li>
-      <li>bar:bOp</li>
-      <li>baz:b00p</li>
-    </ul>
-  `
 })
 
 test("route params separated by a dash", () => {
@@ -108,25 +106,24 @@ test("route params separated by a dash", () => {
       [
         "/:foo-:bar-:baz",
         state =>
-          h(
-            "ul",
-            {},
-            Object.keys(state.router.params).map(key =>
-              h("li", {}, `${key}:${state.router.params[key]}`)
-            )
-          )
+          h("ul", {
+            oncreate() {
+              expect(document.body.innerHTML).toBe(`
+                <ul>
+                  <li>foo:beep</li>
+                  <li>bar:bop</li>
+                  <li>baz:boop</li>
+                </ul>
+              `)
+            }
+          },
+          Object.keys(state.router.route.params).map(key =>
+            h("li", {}, `${key}:${state.router.route.params[key]}`)
+          ))
       ]
     ],
     mixins: [Router]
   })
-
-  expectHTMLToBe`
-    <ul>
-      <li>foo:beep</li>
-      <li>bar:bop</li>
-      <li>baz:boop</li>
-    </ul>
-  `
 })
 
 test("route params including a dot", () => {
@@ -137,45 +134,50 @@ test("route params including a dot", () => {
       [
         "/:foo/:bar/:baz",
         state =>
-          h(
-            "ul",
-            {},
-            Object.keys(state.router.params).map(key =>
-              h("li", {}, `${key}:${state.router.params[key]}`)
-            )
-          )
+          h("ul", {
+            oncreate() {
+              expect(document.body.innerHTML).toBe(`
+                <ul>
+            			<li>foo:beep</li>
+                  <li>bar:bop.bop</li>
+                  <li>baz:boop</li>
+                </ul>
+              `)
+            }
+          },
+          Object.keys(state.router.route.params).map(key =>
+            h("li", {}, `${key}:${state.router.route.params[key]}`)
+          ))
       ]
     ],
     mixins: [Router]
   })
-
-  expectHTMLToBe`
-    <ul>
-			<li>foo:beep</li>
-      <li>bar:bop.bop</li>
-      <li>baz:boop</li>
-    </ul>
-  `
 })
 
 test("routes with dashes into a single param key", () => {
   window.location.pathname = "/beep-bop-boop"
 
   app({
-    view: [["/:foo", state => h("div", {}, state.router.params.foo)]],
+    view: [["/:foo", state => h("div", {
+      oncreate() {
+        expect(document.body.innerHTML).toBe(`
+          <div>
+            beep-bop-boop
+          </div>
+        `)
+      }
+    }, state.router.route.params.foo)]],
     mixins: [Router]
   })
-
-  expectHTMLToBe`
-    <div>
-      beep-bop-boop
-    </div>
-  `
 })
 
 test("popstate", () => {
   app({
-    view: [["/", state => ""], ["/foo", state => h("div", {}, "foo")]],
+    view: [["/", state => ""], ["/foo", state => h("div", {
+      oncreate() {
+        expect(document.body.innerHTML).toBe(`<div>foo</div>`)
+      }
+    }, "foo")]],
     mixins: [Router]
   })
 
@@ -184,12 +186,6 @@ test("popstate", () => {
   const event = document.createEvent("Event")
   event.initEvent("popstate", true, true)
   window.document.dispatchEvent(event)
-
-  expectHTMLToBe`
-    <div>
-      foo
-    </div>
-  `
 })
 
 test("go", () => {

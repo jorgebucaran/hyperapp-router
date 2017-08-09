@@ -1,70 +1,68 @@
-export function Router(app, view) {
+export function Router(emit) {
   return {
-    state: {
-      router: match(location.pathname)
-    },
     actions: {
       router: {
-        match: function(state, actions, data, emit) {
+        update: function(state, actions, data) {
           return {
-            router: emit("route", match(data))
+            router: {
+              url: location.pathname,
+              route: data || {}
+            }
           }
         },
         go: function(state, actions, data) {
           history.pushState({}, "", data)
-          actions.router.match(data.split("?")[0])
+          actions.router.update()
         }
       }
     },
     events: {
-      loaded: function(state, actions) {
-        match()
-        addEventListener("popstate", match)
-
-        function match() {
-          actions.router.match(location.pathname)
-        }
+      load: function(_, actions) {
+        actions.router.update()
+        addEventListener("popstate", function() {
+          actions.router.update()
+        })
       },
-      render: function() {
-        return view
-      }
-    }
-  }
-
-  function match(data) {
-    for (var match, params = {}, i = 0, len = app.view.length; i < len; i++) {
-      var route = app.view[i][0]
-      var keys = []
-
-      if (!match) {
-        data.replace(
-          RegExp(
-            route === "*"
-              ? "." + route
-              : "^" +
-                  route
-                    .replace(/\//g, "\\/")
-                    .replace(/:([\w]+)/g, function(_, key) {
-                      keys.push(key)
-                      return "([-\\.%\\w]+)"
-                    }) +
-                  "/?$",
-            "g"
-          ),
-          function() {
-            for (var j = 1; j < arguments.length - 2; ) {
-              params[keys.shift()] = arguments[j++]
-            }
-            match = route
-            view = app.view[i][1]
+      render: function(state, actions, view) {
+        if (state.router.url !== state.router.route.url) {
+          var pathname = state.router.url
+          var pattern = function(route) {
+            return RegExp(
+              route === "*"
+                ? "." + route
+                : "^" +
+                    route
+                      .replace(/\//g, "\\/")
+                      .replace(/:([\w]+)/g, "([-\\.\\w]+)") +
+                    "/?$",
+              "g"
+            )
           }
-        )
+          var values
+          var count = 1
+          var params = {}
+          var regex = RegExp(/\/(\w+)/g)
+          var route = view.filter(function(x) {
+            return pathname.match(pattern(x[0]))
+          })[0]
+          var keys = route[0].split("/")
+          while (keys[count] && (values = regex.exec(pathname))) {
+            keys[count][0] === ":" && (params[keys[count].slice(1)] = values[1])
+            count++
+          }
+          emit(
+            "route",
+            actions.router.update({
+              url: pathname,
+              view: route[1],
+              match: route[0],
+              params: params
+            })
+          )
+          return route[1]
+        }
+        return state.router.route.view
       }
-    }
-
-    return {
-      match: match,
-      params: params
     }
   }
 }
