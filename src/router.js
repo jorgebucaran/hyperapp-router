@@ -18,7 +18,7 @@ export function Router(config) {
         }
       },
       events: {
-        init: function(state, actions) {
+        load: function(state, actions) {
           addEventListener("popstate", function(){
             actions.router.match(location.pathname)
           })
