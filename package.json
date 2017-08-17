@@ -1,29 +1,30 @@
 {
   "name": "@hyperapp/router",
-  "description": "Actions and events for routing client-side pages with HyperApp.",
+  "description": "Utilities for routing client-side pages with HyperApp.",
   "version": "0.0.2",
   "main": "dist/router.js",
   "jsnext:main": "src/index.js",
   "module": "src/index.js",
   "license": "MIT",
   "repository": "hyperapp/router",
-  "files": [
-    "src",
-    "dist"
-  ],
+  "files": ["src", "dist"],
   "author": "Jorge Bucaran",
   "keywords": [
-    "hyperx",
-    "hyperscript",
-    "jsx",
+    "hyperapp",
     "react",
     "elm",
-    "virtual-dom",
+    "jsx",
+    "virtual dom",
+    "vdom",
+    "hyperx",
+    "hyperscript",
     "router"
   ],
   "scripts": {
     "test": "jest --coverage --no-cache",
-    "build": "rollup -cm -n Router -f umd -i src/index.js -o dist/router.js",
+    "build": "npm run bundle && npm run minify",
+    "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn Router",
+    "minify": "uglifyjs dist/router.js -o dist/router.js --mangle --compress warnings=false --pure-funcs=Object.defineProperty -p relative --source-map dist/router.js.map",
     "prepublish": "npm run build",
     "format": "prettier --semi false --write 'src/**/*.js'",
     "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
@@ -33,10 +34,10 @@
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
-    "hyperapp": "^0.9.3",
+    "hyperapp": "0.11.0",
     "jest": "^20.0.4",
-    "prettier": "~1.4.1",
-    "rollup": "^0.41.6",
-    "rollup-plugin-uglify": "^2.0.1"
+    "prettier": "~1.5.3",
+    "rollup": "^0.47.6",
+    "uglify-js": "^2.7.5"
   }
 }

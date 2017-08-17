@@ -1,70 +1,78 @@
-export function Router(app, view) {
+export function Router(emit) {
   return {
     state: {
-      router: match(location.pathname)
+      router: {}
     },
     actions: {
       router: {
-        match: function(state, actions, data, emit) {
+        set: function(state, actions, data) {
           return {
-            router: emit("route", match(data))
+            router: data
           }
         },
-        go: function(state, actions, data) {
-          history.pushState({}, "", data)
-          actions.router.match(data.split("?")[0])
+        go: function(state, actions, path) {
+          if (location.pathname + location.search !== path) {
+            history.pushState({}, "", path)
+            actions.router.set({
+              path: path
+            })
+          }
         }
       }
     },
     events: {
-      loaded: function(state, actions) {
-        match()
-        addEventListener("popstate", match)
-
-        function match() {
-          actions.router.match(location.pathname)
-        }
+      load: function(state, actions) {
+        addEventListener("popstate", function() {
+          actions.router.set({})
+        })
       },
-      render: function() {
-        return view
+      render: function(state, actions, view) {
+        return view[
+          (state.router.index >= 0
+            ? state
+            : actions.router.set(
+                emit("route", match(location.pathname, view))
+              )).router.index
+        ][1]
       }
     }
   }
+}
 
-  function match(data) {
-    for (var match, params = {}, i = 0, len = app.view.length; i < len; i++) {
-      var route = app.view[i][0]
-      var keys = []
+function match(pathname, routes) {
+  var match
+  var index
+  var params = {}
 
-      if (!match) {
-        data.replace(
-          RegExp(
-            route === "*"
-              ? "." + route
-              : "^" +
-                  route
-                    .replace(/\//g, "\\/")
-                    .replace(/:([\w]+)/g, function(_, key) {
-                      keys.push(key)
-                      return "([-\\.%\\w]+)"
-                    }) +
-                  "/?$",
-            "g"
-          ),
-          function() {
-            for (var j = 1; j < arguments.length - 2; ) {
-              params[keys.shift()] = arguments[j++]
-            }
-            match = route
-            view = app.view[i][1]
-          }
-        )
+  for (var i = 0; i < routes.length && !match; i++) {
+    var route = routes[i][0]
+    var keys = []
+
+    pathname.replace(
+      RegExp(
+        route === "*"
+          ? ".*"
+          : "^" +
+            route.replace(/\//g, "\\/").replace(/:([\w]+)/g, function(_, key) {
+              keys.push(key)
+              return "([-\\.%\\w]+)"
+            }) +
+            "/?$",
+        "g"
+      ),
+      function() {
+        for (var j = 1; j < arguments.length - 2; ) {
+          params[keys.shift()] = arguments[j++]
+        }
+        match = route
+        index = i
       }
-    }
+    )
+  }
 
-    return {
-      match: match,
-      params: params
-    }
+  return {
+    match: match,
+    index: index,
+    params: params
   }
 }
