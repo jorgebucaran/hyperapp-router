@@ -4,32 +4,63 @@
 [![npm](https://img.shields.io/npm/v/@hyperapp/router.svg)](https://www.npmjs.org/package/hyperapp)
 [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
-@hyperapp/router provides actions and events for routing client-side pages with [HyperApp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
-## Installation
+@hyperapp/router provides utilities for routing client-side pages with [HyperApp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
 
-Using [npm](https://npmjs.com):
+<!--
 
-<pre>
-npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router</a>
-</pre>
-
-Then setup a [build pipeline](https://github.com/hyperapp/hyperapp/blob/master/docs/getting-started.md#build-pipeline) and import it.
+[Try it Online](..)
 
 ```jsx
-import { Router } from "@hyperapp/router"
-```
+app({
+  view: [
+    [
+      "/",
+      (state, actions) =>
+        <div>
+          <button onclick={() => actions.router.go("/about")}>About</button>
+        </div>
+    ],
+    [
+      "/:route",
+      (state, actions) =>
+        <div>
+          <button onclick={() => actions.router.go("/")}>Home</button>
+        </div>
+    ]
+  ],
+  mixins: [Router]
+})
+``` -->
 
-Using a CDN:
+## Installation
+
+Download from a CDN.
 
 ```html
 <script src="https://unpkg.com/@hyperapp/router"></script>
 ```
 
-Then access the router in the global scope as <samp>Router</samp>.
+Then access the router in the global scope as `Router`.
+
+```jsx
+const { Router } = Router
+```
+
+Or install with npm / Yarn.
+
+<pre>
+npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router</a>
+</pre>
+
+And import it.
+
+```jsx
+import { Router } from "@hyperapp/router"
+```
 
 ## Usage
 
-Register the router as a [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/core.md#mixins). Then compose your view as an array of route/view pairs.
+Register the router as a [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/mixins.md). Then compose your view as an array of route / view pairs.
 
 ```jsx
 app({
@@ -43,81 +74,73 @@ app({
 
 When the page loads or the browser fires a [popstate](https://developer.mozilla.org/en-US/docs/Web/Events/popstate) event, the first route that matches [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location) will be rendered.
 
-Routes are matched in the order in which they are declared. To use the wildcard <samp>*</samp> correctly, it must be declared last.
+### Routes
 
-|route                    | location.pathname    |
-|-------------------------|-----------------------------------|
-| <samp>/</samp>          | <samp>/</samp>
-| <samp>/:foo</samp>      | Match <samp>[A-Za-z0-9]+</samp>. See [params](#params).
-| <samp>*</samp>          | Match anything.
+Routes are matched in the order in which they are declared. If you are using the wildcard `*`, it should be the last route.
 
-To navigate to a different route use [actions.router.go](#go).
+#### `/`
 
-## Example
+Match the index route.
 
-[Try it online](https://hyperapp-router-example.glitch.me/)
+#### `*`
 
-```jsx
-app({
-  view: [
-    [
-      "/",
-      (state, actions) =>
-        <div>
-          <h1>Home</h1>
-          <a href="#about">About</a>
-        </div>
-    ],
-    [
-      "/:route",
-      (state, actions) =>
-        <div>
-          <h1>About</h1>
-          <a href="#home">Home</a>
-        </div>
-    ]
-  ],
-  mixins: [Router]
-})
-```
+Match any route.
+
+#### `/:foo`
+
+Match using [A-Za-z0-9]+.
+
 
 ## API
 
-### state
-#### params
-
-Type: { <i>foo</i>: string, ... }
-
-The matched route params.
-
-|route                 |location.pathname    |state.router.params  |
-|----------------------|---------------------|---------------------|
-|<samp>/:foo</samp>    |/hyper               | { foo: "hyper" }    |
-
-#### match
-
-Type: string
+### state.router.match
 
 The matched route.
 
-### actions
-#### go
+<pre>
+string
+</pre>
 
-Type: ([path](#router_go_path))
-* path: string
+### state.router.params
+
+The matched route params.
+
+<pre>
+{
+  [key]: string
+}
+</pre>
+
+|route                 |location.pathname    |state.router.params  |
+|----------------------|---------------------|---------------------|
+|`/:foo`               |/hyper               | { foo: "hyper" }    |
+
+### actions.router.go
 
 Update [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location).
 
-### events
+<pre>
+actions.router.go(string)
+</pre>
+
+### Events
+
 #### route
 
-Type: ([state](/docs/api.md#state), [actions](/docs/api.md#actions), [data](#events-data), [emit](/docs/api.md#emit)) | Array\<[route](#route)\>
+This event is fired when a new route is matched. Use it to make a network request, parse [location.search](https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/search), etc.
 
-* <a name="events-data"></a>data
-  * [params](#params)
-  * [match](#match)
+<pre>
+<a id="route"></a>route(<a href="#state">State</a>, <a href="#actions">Actions</a>, <a href="#Route">Route</a>): <a href="#Route">Route</a>
+</pre>
 
-Fired when a route is matched.
+#### Route
+
+<pre>
+{
+  match: string,
+  params: any
+}
+</pre>
 
 ## License
 
