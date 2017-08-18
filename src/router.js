@@ -1,4 +1,17 @@
+function isHistoryApiAvailable() {
+  return window.history && window.history.pushState
+}
+
 export function router(options) {
+  options = options || {}
+  if (typeof options.hash == "undefined")
+    options.hash = !isHistoryApiAvailable()
+
+  function getLocation() {
+    return options.hash
+      ? (location.hash || "/").replace(/^#/, "")
+      : location.pathname
+  }
   return function(emit) {
     return {
       state: {
@@ -12,8 +25,9 @@ export function router(options) {
             }
           },
           go: function(state, actions, path) {
-            if (location.pathname + location.search !== path) {
-              history.pushState({}, "", path)
+            if (getLocation() !== path) { // TODO: what about location.search?
+              if (options.hash) location.hash = path
+              else history.pushState({}, "", path)
               actions.router.set({
                 path: path
               })
@@ -23,17 +37,19 @@ export function router(options) {
       },
       events: {
         load: function(state, actions) {
-          addEventListener("popstate", function() {
-            actions.router.set({})
-          })
+          addEventListener(
+            options.hash ? "hashchange" : "popstate",
+            function() {
+              actions.router.set({})
+            }
+          )
         },
         render: function(state, actions, view) {
           return view[
             (state.router.index >= 0
               ? state
-              : actions.router.set(
-                  emit("route", match(location.pathname, view))
-                )).router.index
+              : actions.router.set(emit("route", match(getLocation(), view))))
+              .router.index
           ][1]
         }
       }
