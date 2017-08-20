@@ -9,5 +9,5 @@ export function Link(props, children) {
     props.go(props.href)
   }
 
-  return h("a", props, [children])
+  return h("a", props, children)
 }
