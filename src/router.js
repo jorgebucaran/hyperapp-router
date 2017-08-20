@@ -30,9 +30,8 @@ export function Router(emit) {
         return view[
           (state.router.index >= 0
             ? state
-            : actions.router.set(
-                emit("route", match(location.pathname, view))
-              )).router.index
+            : actions.router.set(emit("route", match(location.pathname, view))))
+            .router.index
         ][1]
       }
     }

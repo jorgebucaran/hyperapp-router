@@ -1,7 +1,7 @@
 {
   "name": "@hyperapp/router",
   "description": "Utilities for routing client-side pages with Hyperapp.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "dist/router.js",
   "jsnext:main": "src/index.js",
   "module": "src/index.js",
@@ -26,7 +26,7 @@
   "scripts": {
     "test": "jest --coverage --no-cache",
     "build": "npm run bundle && npm run minify",
-    "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn Router",
+    "bundle": "rollup -g hyperapp:hyperapp -i src/index.js -o dist/router.js -f umd -mn Router",
     "minify": "uglifyjs dist/router.js -o dist/router.js --mangle --compress warnings=false --pure-funcs=Object.defineProperty -p relative --source-map dist/router.js.map",
     "prepublish": "npm run build",
     "format": "prettier --semi false --write 'src/**/*.js'",
