@@ -175,7 +175,7 @@ test("route params including a dot", done => {
   })
 })
 
-test("routes with dashes into a single param key", done => {
+test("routes params with a dash in key", done => {
   window.location.pathname = "/beep-bop-boop"
 
   app({
@@ -199,30 +199,7 @@ test("routes with dashes into a single param key", done => {
   })
 })
 
-test("route params with parentheses", done => {
-  window.location.pathname = "/Parenthesis(rhetoric)"
-  app({
-    view: [
-      [
-        "/:foo",
-        state =>
-          h(
-            "div",
-            {
-              oncreate() {
-                expect(document.body.innerHTML).toBe(`<div>Parenthesis(rhetoric)</div>`)
-                done()
-              }
-            },
-            state.router.params.foo
-          )
-      ]
-    ],
-    mixins: [Router]
-  })
-})
-
-test("route params with uri encoded string", done => {
+test("route params with uri encoded string & parentheses ", done => {
   window.location.pathname = "/Batman%20(1989%20film)"
   app({
     view: [
@@ -233,7 +210,9 @@ test("route params with uri encoded string", done => {
             "div",
             {
               oncreate() {
-                expect(document.body.innerHTML).toBe(`<div>Batman (1989 film)</div>`)
+                expect(document.body.innerHTML).toBe(
+                  `<div>Batman (1989 film)</div>`
+                )
                 done()
               }
             },
@@ -424,3 +403,4 @@ test("fire route only if path changes", done => {
     mixins: [Router]
   })
 })
+

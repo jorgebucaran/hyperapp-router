@@ -6,44 +6,44 @@
 
 @hyperapp/router provides utilities for routing client-side pages with [HyperApp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
 
-<!--
-
-[Try it Online](..)
+[Try it Online](http://hyperapp-router.surge.sh)
 
 ```jsx
+import { Router, Link } from "@hyperapp/router"
+
 app({
   view: [
     [
       "/",
       (state, actions) =>
-        <div>
-          <button onclick={() => actions.router.go("/about")}>About</button>
-        </div>
+        <Link to="/test" go={actions.router.go}>
+          Test
+        </Link>
     ],
     [
-      "/:route",
+      "/test",
       (state, actions) =>
-        <div>
-          <button onclick={() => actions.router.go("/")}>Home</button>
-        </div>
+        <Link to="/" go={actions.router.go}>
+          Back
+        </Link>
     ]
   ],
   mixins: [Router]
 })
-``` -->
+```
 
 ## Installation
 
-Download from a CDN.
+Download from the CDN.
 
 ```html
 <script src="https://unpkg.com/@hyperapp/router"></script>
 ```
 
-Then access the router in the global scope as `Router`.
+Then import from `Router`.
 
 ```jsx
-const { Router } = Router
+const { Router, Link } = Router
 ```
 
 Or install with npm / Yarn.
@@ -52,15 +52,15 @@ Or install with npm / Yarn.
 npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router</a>
 </pre>
 
-And import it.
+Then [bundle](https://github.com/hyperapp/hyperapp/blob/master/docs/getting-started.md#build-pipeline) and import it.
 
 ```jsx
-import { Router } from "@hyperapp/router"
+import { Router, Link } from "@hyperapp/router"
 ```
 
-## Usage
+## Router
 
-Register the router as a [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/mixins.md). Then compose your view as an array of route / view pairs.
+Use the Router as any other [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/mixins.md). Then compose your view as an array of [routes](#routes).
 
 ```jsx
 app({
@@ -72,30 +72,39 @@ app({
 })
 ```
 
-When the page loads or the browser fires a [popstate](https://developer.mozilla.org/en-US/docs/Web/Events/popstate) event, the first route that matches [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location) will be rendered.
-
 ### Routes
 
-Routes are matched in the order in which they are declared. If you are using the wildcard `*`, it should be the last route.
+A route is a tuple that consists of a [path](#paths) and a [view](https://github.com/hyperapp/hyperapp/blob/master/docs/view.md).
 
-#### `/`
+<pre>
+[string, <a href="https://github.com/hyperapp/hyperapp/blob/master/docs/api.md#view">View</a>]
+</pre>
 
-Match the index route.
+Routes are matched in the following three scenarios:
+
+- After the page is loaded.
+- When the browser fires a [popstate](https://developer.mozilla.org/en-US/docs/Web/Events/popstate) event.
+- When [actions.router.go](#actionsroutergo) is called.
+
+If [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location) matches the path of a supplied route, we'll render its view.
+
+### Paths
+
+#### `/`, `/foo`
+
+Match if location.pathname is `/`, `/foo`, etc.
+
+#### `/:key`
+
+Match location.pathname using `[A-Za-z0-9]+` and save the matched path to [state.router.params](#staterouterparams).
 
 #### `*`
 
-Match any route.
-
-#### `/:foo`
-
-Match using [A-Za-z0-9]+.
-
-
-## API
+Match anything. Declaration order dictates matching precedence. If you are using `*`, declare it last.
 
 ### state.router.match
 
-The matched route.
+The matched path.
 
 <pre>
 string
@@ -103,7 +112,7 @@ string
 
 ### state.router.params
 
-The matched route params.
+The matched path params.
 
 <pre>
 {
@@ -111,29 +120,27 @@ The matched route params.
 }
 </pre>
 
-|route                 |location.pathname    |state.router.params  |
+|path                 |location.pathname    |state.router.params  |
 |----------------------|---------------------|---------------------|
 |`/:foo`               |/hyper               | { foo: "hyper" }    |
 
 ### actions.router.go
 
-Update [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location).
+Update [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location) with the supplied path.
 
 <pre>
-actions.router.go(string)
+actions.router.go(<a href="#paths">path</a>)
 </pre>
 
-### Events
+### events.route
 
-#### route
-
-This event is fired when a new route is matched. Use it to make a network request, parse [location.search](https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/search), etc.
+Use route to make a network request, parse [location.search](https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/search), etc. This event is fired when a new route is matched.
 
 <pre>
-<a id="route"></a>route(<a href="#state">State</a>, <a href="#actions">Actions</a>, <a href="#Route">Route</a>): <a href="#Route">Route</a>
+<a id="routeevent"></a>route(<a href="#state">State</a>, <a href="#actions">Actions</a>, <a href="#routeinfo">RouteInfo</a>): <a href="#routeinfo">RouteInfo</a>
 </pre>
 
-#### Route
+#### RouteInfo
 
 <pre>
 {
@@ -141,6 +148,22 @@ This event is fired when a new route is matched. Use it to make a network reques
   params: any
 }
 </pre>
+
+## Link
+
+Use `Link` to create hyperlinks that map to a [route](#routes).
+
+```jsx
+<Link to="/" go={actions.router.go}>Back Home</Link>
+```
+
+### to
+
+A route [path](#paths).
+
+### go
+
+A function that will be called with the supplied path when the hyperlink is clicked.
 
 ## License
 
