@@ -34,7 +34,7 @@ app({
 
 ## Installation
 
-Download from the CDN.
+Download the minified library from a [CDN](https://unpkg.com/@hyperapp/router).
 
 ```html
 <script src="https://unpkg.com/@hyperapp/router"></script>
