@@ -199,6 +199,52 @@ test("routes with dashes into a single param key", done => {
   })
 })
 
+test("route params with parentheses", done => {
+  window.location.pathname = "/Parenthesis(rhetoric)"
+  app({
+    view: [
+      [
+        "/:foo",
+        state =>
+          h(
+            "div",
+            {
+              oncreate() {
+                expect(document.body.innerHTML).toBe(`<div>Parenthesis(rhetoric)</div>`)
+                done()
+              }
+            },
+            state.router.params.foo
+          )
+      ]
+    ],
+    mixins: [Router]
+  })
+})
+
+test("route params with uri encoded string", done => {
+  window.location.pathname = "/Batman%20(1989%20film)"
+  app({
+    view: [
+      [
+        "/:foo",
+        state =>
+          h(
+            "div",
+            {
+              oncreate() {
+                expect(document.body.innerHTML).toBe(`<div>Batman (1989 film)</div>`)
+                done()
+              }
+            },
+            state.router.params.foo
+          )
+      ]
+    ],
+    mixins: [Router]
+  })
+})
+
 test("popstate", done => {
   const view = name =>
     h(

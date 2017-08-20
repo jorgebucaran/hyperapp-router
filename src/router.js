@@ -47,7 +47,6 @@ function match(pathname, routes) {
   for (var i = 0; i < routes.length && !match; i++) {
     var route = routes[i][0]
     var keys = []
-
     pathname.replace(
       RegExp(
         route === "*"
@@ -55,14 +54,18 @@ function match(pathname, routes) {
           : "^" +
             route.replace(/\//g, "\\/").replace(/:([\w]+)/g, function(_, key) {
               keys.push(key)
-              return "([-\\.%\\w]+)"
+              return "([-\\.%\\w\\(\\)]+)"
             }) +
             "/?$",
         "g"
       ),
       function() {
         for (var j = 1; j < arguments.length - 2; ) {
-          params[keys.shift()] = arguments[j++]
+          var value = arguments[j++]
+          try {
+            value = decodeURI(value)
+          } catch (_) {}
+          params[keys.shift()] = value
         }
         match = route
         index = i
