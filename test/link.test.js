@@ -18,7 +18,25 @@ test("Link", done => {
   })
 })
 
-test("Link - Ignore middle click", done => {
+test("Link - Ignore if target ='_blank'", done => {
+  const mock = jest.fn()
+
+  const link = h(Link, {
+    to: "foo",
+    go: mock,
+    target: "_blank"
+  })
+
+  link.data.onclick({
+    button: 0, // Left click
+    preventDefault() {} // Noop
+  })
+
+  expect(mock.mock.calls.length).toBe(0)
+  done()
+})
+
+test("Link - Only capture unmodified left clicks", done => {
   const mock = jest.fn()
 
   const link = h(Link, {
@@ -31,34 +49,10 @@ test("Link - Ignore middle click", done => {
     preventDefault() {} // Noop
   })
 
-  expect(mock.mock.calls.length).toBe(0)
-  done()
-})
-
-test("Link - Ignore if Meta key", done => {
-  const mock = jest.fn()
-
-  const link = h(Link, {
-    to: "foo",
-    go: mock
-  })
-
   link.data.onclick({
     button: 0, // Left click
     metaKey: true,
     preventDefault() {} // Noop
-  })
-
-  expect(mock.mock.calls.length).toBe(0)
-  done()
-})
-
-test("Link - Ignore if CTRL key", done => {
-  const mock = jest.fn()
-
-  const link = h(Link, {
-    to: "foo",
-    go: mock
   })
 
   link.data.onclick({
@@ -67,34 +61,10 @@ test("Link - Ignore if CTRL key", done => {
     preventDefault() {} // Noop
   })
 
-  expect(mock.mock.calls.length).toBe(0)
-  done()
-})
-
-test("Link - Ignore if ALT key", done => {
-  const mock = jest.fn()
-
-  const link = h(Link, {
-    to: "foo",
-    go: mock
-  })
-
   link.data.onclick({
     button: 0, // Left click
     altKey: true,
     preventDefault() {} // Noop
-  })
-
-  expect(mock.mock.calls.length).toBe(0)
-  done()
-})
-
-test("Link - Ignore if Shift key", done => {
-  const mock = jest.fn()
-
-  const link = h(Link, {
-    to: "foo",
-    go: mock
   })
 
   link.data.onclick({
@@ -106,4 +76,3 @@ test("Link - Ignore if Shift key", done => {
   expect(mock.mock.calls.length).toBe(0)
   done()
 })
-

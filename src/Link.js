@@ -5,12 +5,18 @@ export function Link(props, children) {
   props.to = null
 
   props.onclick = function(e) {
-    if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) return
+    if (
+      e.button !== 0 ||
+      e.metaKey ||
+      e.altKey ||
+      e.ctrlKey ||
+      e.shiftKey ||
+      props.target === "_blank"
+    )
+      return
 
-    if (e.button === 0) {
-      e.preventDefault()
-      props.go(props.href)
-    }
+    e.preventDefault()
+    props.go(props.href)
   }
 
   return h("a", props, children)
