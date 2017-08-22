@@ -14,6 +14,9 @@ test("Link", done => {
 
   link.data.onclick({
     button: 0, // Left click
+    target: {
+      origin: window.location.origin
+    },
     preventDefault() {} // Noop
   })
 })
@@ -34,6 +37,26 @@ test("Link - Ignore if target ='_blank'", done => {
   expect(mock.mock.calls.length).toBe(0)
   done()
 })
+
+test("Link - Ignore if different origin", done => {
+  const mock = jest.fn()
+
+  const link = h(Link, {
+    to: "https://github.com",
+    go: mock
+  })
+
+  link.data.onclick({
+    button: 0, // Left click
+    target: {
+      origin: "https://github.com"
+    }
+  })
+
+  expect(mock.mock.calls.length).toBe(0)
+  done()
+})
+
 
 test("Link - Only capture unmodified left clicks", done => {
   const mock = jest.fn()

@@ -11,7 +11,8 @@ export function Link(props, children) {
       event.altKey ||
       event.ctrlKey ||
       event.shiftKey ||
-      props.target === "_blank"
+      props.target === "_blank" ||
+      event.target.origin !== window.location.origin
     ) {
       return
     }
