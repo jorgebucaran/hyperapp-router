@@ -12,8 +12,9 @@ export function Link(props, children) {
       e.ctrlKey ||
       e.shiftKey ||
       props.target === "_blank"
-    )
+    ) {
       return
+    }
 
     e.preventDefault()
     props.go(props.href)
