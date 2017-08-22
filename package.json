@@ -24,7 +24,7 @@
     "router"
   ],
   "scripts": {
-    "test": "jest --coverage --no-cache",
+    "test": "jest --coverage --no-cache --testURL https://hyperapp.js.org",
     "build": "npm run bundle && npm run minify",
     "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn Router",
     "minify": "uglifyjs dist/router.js -o dist/router.js --mangle --compress warnings=false --pure-funcs=Object.defineProperty -p relative --source-map dist/router.js.map",
