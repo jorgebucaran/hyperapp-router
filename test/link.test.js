@@ -29,7 +29,6 @@ test("Link - Ignore if target ='_blank'", done => {
 
   link.data.onclick({
     button: 0, // Left click
-    preventDefault() {} // Noop
   })
 
   expect(mock.mock.calls.length).toBe(0)
@@ -46,31 +45,26 @@ test("Link - Only capture unmodified left clicks", done => {
 
   link.data.onclick({
     button: 1, // Not left click
-    preventDefault() {} // Noop
   })
 
   link.data.onclick({
     button: 0, // Left click
     metaKey: true,
-    preventDefault() {} // Noop
   })
 
   link.data.onclick({
     button: 0, // Left click
     ctrlKey: true,
-    preventDefault() {} // Noop
   })
 
   link.data.onclick({
     button: 0, // Left click
     altKey: true,
-    preventDefault() {} // Noop
   })
 
   link.data.onclick({
     button: 0, // Left click
     shiftKey: true,
-    preventDefault() {} // Noop
   })
 
   expect(mock.mock.calls.length).toBe(0)
