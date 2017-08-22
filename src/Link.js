@@ -4,19 +4,19 @@ export function Link(props, children) {
   props.href = props.to
   props.to = null
 
-  props.onclick = function(e) {
+  props.onclick = function(event) {
     if (
-      e.button !== 0 ||
-      e.metaKey ||
-      e.altKey ||
-      e.ctrlKey ||
-      e.shiftKey ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
       props.target === "_blank"
     ) {
       return
     }
 
-    e.preventDefault()
+    event.preventDefault()
     props.go(props.href)
   }
 
