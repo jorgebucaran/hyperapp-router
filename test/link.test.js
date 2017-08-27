@@ -14,7 +14,7 @@ test("Link", done => {
 
   link.data.onclick({
     button: 0, // Left click
-    target: {
+    currentTarget: {
       origin: window.location.origin
     },
     preventDefault() {} // Noop
@@ -48,7 +48,7 @@ test("Link - Ignore if different origin", done => {
 
   link.data.onclick({
     button: 0, // Left click
-    target: {
+    currentTarget: {
       origin: "https://github.com"
     }
   })
