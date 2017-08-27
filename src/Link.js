@@ -12,7 +12,7 @@ export function Link(props, children) {
       event.ctrlKey ||
       event.shiftKey ||
       props.target === "_blank" ||
-      event.target.origin !== window.location.origin
+      event.currentTarget.origin !== window.location.origin
     ) {
       return
     }
