@@ -1,2 +1,2 @@
-export { Router } from "./Router"
+export { router } from "./Router"
 export { Link } from "./Link"

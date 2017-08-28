@@ -1,11 +1,21 @@
 import { h } from "hyperapp"
 import { Link } from "../src"
 
+const BUTTON_LEFT_CLICK = 0
+const BUTTON_RIGHT_CLICK = 1
+
+Object.defineProperty(window.location, "origin", {
+  writable: true
+})
+
 test("Link", done => {
-  const link = h(Link, {
+  const preventDefault = jest.fn()
+
+  const link = Link({
     to: "foo",
     go(path) {
       expect(path).toBe("foo")
+      expect(preventDefault.mock.calls.length).toBe(1)
       done()
     }
   })
@@ -13,83 +23,86 @@ test("Link", done => {
   expect(link.data.href).toBe("foo")
 
   link.data.onclick({
-    button: 0, // Left click
+    button: BUTTON_LEFT_CLICK,
     target: {
       origin: window.location.origin
     },
-    preventDefault() {} // Noop
+    preventDefault: preventDefault
   })
 })
 
 test("Link - Ignore if target ='_blank'", done => {
-  const mock = jest.fn()
+  const go = jest.fn()
 
   const link = h(Link, {
+    go,
     to: "foo",
-    go: mock,
     target: "_blank"
   })
 
   link.data.onclick({
-    button: 0, // Left click
+    button: BUTTON_LEFT_CLICK
   })
 
-  expect(mock.mock.calls.length).toBe(0)
+  expect(go.mock.calls.length).toBe(0)
   done()
 })
 
 test("Link - Ignore if different origin", done => {
-  const mock = jest.fn()
+  const defaultOrigin = window.location.origin
+  window.location.origin = "https://hyperapp.js.org"
+
+  const go = jest.fn()
 
   const link = h(Link, {
     to: "https://github.com",
-    go: mock
+    go: go
   })
 
   link.data.onclick({
-    button: 0, // Left click
+    button: BUTTON_LEFT_CLICK,
     target: {
       origin: "https://github.com"
     }
   })
 
-  expect(mock.mock.calls.length).toBe(0)
+  expect(go.mock.calls.length).toBe(0)
+  window.location.origin = defaultOrigin
   done()
 })
 
-
 test("Link - Only capture unmodified left clicks", done => {
-  const mock = jest.fn()
+  const go = jest.fn()
 
   const link = h(Link, {
     to: "foo",
-    go: mock
+    go: go
   })
 
   link.data.onclick({
-    button: 1, // Not left click
+    button: BUTTON_RIGHT_CLICK
   })
 
   link.data.onclick({
-    button: 0, // Left click
-    metaKey: true,
+    button: BUTTON_LEFT_CLICK,
+    metaKey: true
   })
 
   link.data.onclick({
-    button: 0, // Left click
-    ctrlKey: true,
+    button: BUTTON_LEFT_CLICK,
+    ctrlKey: true
   })
 
   link.data.onclick({
-    button: 0, // Left click
-    altKey: true,
+    button: BUTTON_LEFT_CLICK,
+    altKey: true
   })
 
   link.data.onclick({
-    button: 0, // Left click
-    shiftKey: true,
+    button: BUTTON_LEFT_CLICK,
+    shiftKey: true
   })
 
-  expect(mock.mock.calls.length).toBe(0)
+  expect(go.mock.calls.length).toBe(0)
   done()
 })
