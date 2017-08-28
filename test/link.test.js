@@ -24,14 +24,14 @@ test("Link", done => {
 
   link.data.onclick({
     button: BUTTON_LEFT_CLICK,
-    target: {
+    currentTarget: {
       origin: window.location.origin
     },
     preventDefault: preventDefault
   })
 })
 
-test("Link - Ignore if target ='_blank'", done => {
+test("ignore if target ='_blank'", done => {
   const go = jest.fn()
 
   const link = h(Link, {
@@ -48,7 +48,7 @@ test("Link - Ignore if target ='_blank'", done => {
   done()
 })
 
-test("Link - Ignore if different origin", done => {
+test("ignore if different origin", done => {
   const defaultOrigin = window.location.origin
   window.location.origin = "https://hyperapp.js.org"
 
@@ -61,7 +61,7 @@ test("Link - Ignore if different origin", done => {
 
   link.data.onclick({
     button: BUTTON_LEFT_CLICK,
-    target: {
+    currentTarget: {
       origin: "https://github.com"
     }
   })
@@ -71,7 +71,7 @@ test("Link - Ignore if different origin", done => {
   done()
 })
 
-test("Link - Only capture unmodified left clicks", done => {
+test("only capture unmodified left clicks", done => {
   const go = jest.fn()
 
   const link = h(Link, {
