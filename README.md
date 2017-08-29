@@ -9,7 +9,7 @@
 [Try it Online](http://hyperapp-router.surge.sh)
 
 ```jsx
-import { Router, Link } from "@hyperapp/router"
+import { router, Link } from "@hyperapp/router"
 
 app({
   view: [
@@ -28,7 +28,7 @@ app({
         </Link>
     ]
   ],
-  mixins: [Router]
+  mixins: [router()]
 })
 ```
 
@@ -40,10 +40,10 @@ Download the minified library from a [CDN](https://unpkg.com/@hyperapp/router).
 <script src="https://unpkg.com/@hyperapp/router"></script>
 ```
 
-Then import from `Router`.
+Then import from `router`.
 
 ```jsx
-const { Router, Link } = Router
+const { router, Link } = router
 ```
 
 Or install with npm / Yarn.
@@ -55,12 +55,12 @@ npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router<
 Then [bundle](https://github.com/hyperapp/hyperapp/blob/master/docs/getting-started.md#build-pipeline) and use as you would any other module.
 
 ```jsx
-import { Router, Link } from "@hyperapp/router"
+import { router, Link } from "@hyperapp/router"
 ```
 
-## Router
+## Mixin
 
-Use the Router as any other [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/mixins.md). Then compose your view as an array of [routes](#routes).
+Use the router as any other [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/mixins.md). Then compose your view as an array of [routes](#routes).
 
 ```jsx
 app({
@@ -68,7 +68,7 @@ app({
     ["/", state => <h1>Hi.</h1>]
     ["*", state => <h1>404</h1>],
   ],
-  mixins: [Router]
+  mixins: [router()]
 })
 ```
 
