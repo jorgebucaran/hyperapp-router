@@ -1,5 +1,5 @@
 import { h, app } from "hyperapp"
-import { Router } from "../src"
+import { router } from "../src"
 
 window.requestAnimationFrame = setTimeout
 
@@ -33,7 +33,7 @@ test("/", done => {
           )
       ]
     ],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -61,7 +61,7 @@ test("*", done => {
           )
       ]
     ],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -87,7 +87,7 @@ test("routes", done => {
           )
       ]
     ],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -115,7 +115,7 @@ test("route params", done => {
           )
       ]
     ],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -143,7 +143,7 @@ test("route params separated by a dash", done => {
           )
       ]
     ],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -171,7 +171,7 @@ test("route params including a dot", done => {
           )
       ]
     ],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -195,7 +195,7 @@ test("routes params with a dash in key", done => {
           )
       ]
     ],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -220,7 +220,7 @@ test("route params with uri encoded string & parentheses ", done => {
           )
       ]
     ],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -248,7 +248,7 @@ test("popstate", done => {
 
   app({
     view: [["/", () => view("")], ["/foo", () => view("foo")]],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -308,7 +308,7 @@ test("go", done => {
           )
       ]
     ],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -321,7 +321,7 @@ test("route", done => {
       }
     },
     view: [["/", (state, actions) => h("div", {}, "foo")]],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -360,7 +360,7 @@ test("do not fire route for unrelated state updates", done => {
           )
       ]
     ],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
@@ -400,7 +400,7 @@ test("fire route only if path changes", done => {
           )
       ]
     ],
-    mixins: [Router]
+    mixins: [router()]
   })
 })
 
