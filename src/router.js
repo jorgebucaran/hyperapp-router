@@ -25,7 +25,8 @@ export function router(options) {
             }
           },
           go: function(state, actions, path) {
-            if (getLocation() !== path) { // TODO: what about location.search?
+            if (getLocation() !== path) {
+              // TODO: what about location.search?
               if (options.hash) location.hash = path
               else history.pushState({}, "", path)
               actions.router.set({
