@@ -29,7 +29,7 @@
     "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn router",
     "minify": "uglifyjs dist/router.js -o dist/router.js --mangle --compress warnings=false --pure-funcs=Object.defineProperty -p relative --source-map dist/router.js.map",
     "prepublish": "npm run build",
-    "format": "prettier --semi false --write 'src/**/*.js'",
+    "format": "prettier --semi false --write '{src,test}/**/*.js'",
     "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "babel": {
@@ -39,6 +39,7 @@
     "babel-preset-es2015": "^6.24.1",
     "hyperapp": "^0.12.0",
     "jest": "^20.0.4",
+    "jest-cli": "^20.0.4",
     "prettier": "~1.5.3",
     "rollup": "^0.47.6",
     "uglify-js": "^2.7.5"

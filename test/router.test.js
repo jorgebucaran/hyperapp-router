@@ -10,6 +10,7 @@ Object.defineProperty(window.location, "pathname", {
 beforeEach(() => {
   document.body.innerHTML = ""
   location.pathname = "/"
+  location.hash = ""
   history.pushState = function(state, title, url) {
     location.pathname = url
   }
@@ -404,3 +405,134 @@ test("fire route only if path changes", done => {
   })
 })
 
+test("{ hash: true }", done => {
+  app({
+    view: [
+      [
+        "/",
+        () =>
+          h(
+            "div",
+            {
+              oncreate() {
+                expect(document.body.innerHTML).toBe(`<div>foo</div>`)
+                done()
+              }
+            },
+            "foo"
+          )
+      ]
+    ],
+    mixins: [router({ hash: true })]
+  })
+})
+
+test("#/ ({ hash: true })", done => {
+  location.hash = "#/"
+  app({
+    view: [
+      [
+        "/",
+        () =>
+          h(
+            "div",
+            {
+              oncreate() {
+                expect(document.body.innerHTML).toBe(`<div>foo</div>`)
+                done()
+              }
+            },
+            "foo"
+          )
+      ]
+    ],
+    mixins: [router({ hash: true })]
+  })
+})
+
+test("#/about ({ hash: true })", done => {
+  location.hash = "#/about"
+  app({
+    view: [
+      ["/", () => h("div", "foo")],
+      [
+        "/about",
+        () =>
+          h(
+            "div",
+            {
+              oncreate() {
+                expect(document.body.innerHTML).toBe(`<div>bar</div>`)
+                done()
+              }
+            },
+            "bar"
+          )
+      ]
+    ],
+    mixins: [router({ hash: true })]
+  })
+})
+
+test("go ({ hash: true })", done => {
+  app({
+    view: [
+      [
+        "/",
+        (state, actions) =>
+          h("div", {
+            oncreate() {
+              expect(document.body.innerHTML).toBe("<div></div>")
+              actions.router.go("/foo")
+            }
+          })
+      ],
+      [
+        "/foo",
+        (state, actions) =>
+          h(
+            "div",
+            {
+              onupdate() {
+                expect(location.hash).toBe("#/foo")
+                expect(document.body.innerHTML).toBe("<div>foo</div>")
+                actions.router.go("/bar")
+              }
+            },
+            "foo"
+          )
+      ],
+      [
+        "/bar",
+        (state, actions) =>
+          h(
+            "div",
+            {
+              onupdate() {
+                expect(location.hash).toBe("#/bar")
+                expect(document.body.innerHTML).toBe("<div>bar</div>")
+                actions.router.go("/baz")
+              }
+            },
+            "bar"
+          )
+      ],
+      [
+        "/baz",
+        (state, actions) =>
+          h(
+            "div",
+            {
+              onupdate() {
+                expect(location.hash).toBe("#/baz")
+                expect(document.body.innerHTML).toBe("<div>baz</div>")
+                done()
+              }
+            },
+            "baz"
+          )
+      ]
+    ],
+    mixins: [router({ hash: true })]
+  })
+})
