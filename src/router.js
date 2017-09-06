@@ -1,4 +1,6 @@
-export function router(options) {
+import { Link } from "./Link"
+
+export function router(routes) {
   return function(emit) {
     return {
       state: {
@@ -28,13 +30,29 @@ export function router(options) {
           })
         },
         render: function(state, actions, view) {
-          return view[
-            (state.router.index >= 0
-              ? state
-              : actions.router.set(
-                  emit("route", match(location.pathname, view))
-                )).router.index
-          ][1]
+          return function(state, actions, widgets) {
+            widgets = widgets || {}
+
+            widgets.Link = function(props, children) {
+              props.go = actions.router.go
+              return Link(props, children)
+            }
+
+            var route =
+              routes[
+                (state.router.index >= 0
+                  ? state
+                  : actions.router.set(
+                      emit("route", match(location.pathname, routes))
+                    )).router.index
+              ][1]
+
+            widgets.Route = function(props, children) {
+              return route(state, actions, widgets)
+            }
+
+            return view(state, actions, widgets)
+          }
         }
       }
     }

@@ -12,23 +12,23 @@
 import { router, Link } from "@hyperapp/router"
 
 app({
-  view: [
+  view: (state, actions, { Route }) => <Route />,
+  mixins: [router([
     [
       "/",
-      (state, actions) =>
-        <Link to="/test" go={actions.router.go}>
+      (state, actions, { Link }) =>
+        <Link to="/test">
           Test
         </Link>
     ],
     [
       "/test",
-      (state, actions) =>
-        <Link to="/" go={actions.router.go}>
+      (state, actions, { Link }) =>
+        <Link to="/">
           Back
         </Link>
     ]
-  ],
-  mixins: [router()]
+  ])]
 })
 ```
 
