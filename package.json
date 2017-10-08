@@ -37,13 +37,13 @@
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
-    "hyperapp": "^0.12.0",
-    "jest": "^20.0.4",
-    "prettier": "~1.5.3",
-    "rollup": "^0.47.6",
+    "hyperapp": "^0.14.0",
+    "jest": "^21.2.1",
+    "prettier": "~1.7.4",
+    "rollup": "^0.50.0",
     "uglify-js": "^2.7.5"
   },
   "peerDependencies": {
-    "hyperapp": "^0.12.0"
+    "hyperapp": "^0.14.0"
   }
 }

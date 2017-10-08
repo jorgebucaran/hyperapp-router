@@ -1,41 +1,38 @@
-export function router(options) {
-  return function(emit) {
-    return {
-      state: {
-        router: {}
-      },
-      actions: {
-        router: {
-          set: function(state, actions, data) {
-            return {
-              router: data
-            }
+import { h } from 'hyperapp'
+
+export function router(routes) {
+  return function (app) {
+    return function (props) {
+      return app(enhance(props))
+
+      function enhance(props) {
+        props = Object.assign({ state: {}, actions: {} }, props)
+
+        props.state.router = {}
+        props.actions.router = {
+          set: function (state, actions, data) {
+            return data
           },
-          go: function(state, actions, path) {
+          go: function (state, actions, path) {
             if (location.pathname + location.search !== path) {
-              history.pushState({}, "", path)
-              actions.router.set({
-                path: path
-              })
+              history.pushState({}, '', path)
+              actions.set({ path: path })
             }
           }
         }
-      },
-      events: {
-        load: function(state, actions) {
-          addEventListener("popstate", function() {
+
+        props.view = function (state, actions) {
+          window.onpopstate = function () {
             actions.router.set({})
-          })
-        },
-        render: function(state, actions, view) {
-          return view[
-            (state.router.index >= 0
-              ? state
-              : actions.router.set(
-                  emit("route", match(location.pathname, view))
-                )).router.index
-          ][1]
+          }
+
+          const m = match(location.pathname, routes)
+          const v = routes[m.index][1]
+          state.router.params = m.params
+          return v(state, actions)
         }
+
+        return props
       }
     }
   }
@@ -54,19 +51,19 @@ function match(pathname, routes) {
         route === "*"
           ? ".*"
           : "^" +
-            route.replace(/\//g, "\\/").replace(/:([\w]+)/g, function(_, key) {
-              keys.push(key)
-              return "([-\\.%\\w\\(\\)]+)"
-            }) +
-            "/?$",
+          route.replace(/\//g, "\\/").replace(/:([\w]+)/g, function (_, key) {
+            keys.push(key)
+            return "([-\\.%\\w\\(\\)]+)"
+          }) +
+          "/?$",
         "g"
       ),
-      function() {
-        for (var j = 1; j < arguments.length - 2; ) {
+      function () {
+        for (var j = 1; j < arguments.length - 2;) {
           var value = arguments[j++]
           try {
             value = decodeURI(value)
-          } catch (_) {}
+          } catch (_) { }
           params[keys.shift()] = value
         }
         match = route

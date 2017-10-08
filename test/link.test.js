@@ -20,9 +20,9 @@ test("Link", done => {
     }
   })
 
-  expect(link.data.href).toBe("foo")
+  expect(link.props.href).toBe("foo")
 
-  link.data.onclick({
+  link.props.onclick({
     button: BUTTON_LEFT_CLICK,
     currentTarget: {
       origin: window.location.origin
@@ -40,7 +40,7 @@ test("ignore if target ='_blank'", done => {
     target: "_blank"
   })
 
-  link.data.onclick({
+  link.props.onclick({
     button: BUTTON_LEFT_CLICK
   })
 
@@ -59,7 +59,7 @@ test("ignore if different origin", done => {
     go: go
   })
 
-  link.data.onclick({
+  link.props.onclick({
     button: BUTTON_LEFT_CLICK,
     currentTarget: {
       origin: "https://github.com"
@@ -79,26 +79,26 @@ test("only capture unmodified left clicks", done => {
     go: go
   })
 
-  link.data.onclick({
+  link.props.onclick({
     button: BUTTON_RIGHT_CLICK
   })
 
-  link.data.onclick({
+  link.props.onclick({
     button: BUTTON_LEFT_CLICK,
     metaKey: true
   })
 
-  link.data.onclick({
+  link.props.onclick({
     button: BUTTON_LEFT_CLICK,
     ctrlKey: true
   })
 
-  link.data.onclick({
+  link.props.onclick({
     button: BUTTON_LEFT_CLICK,
     altKey: true
   })
 
-  link.data.onclick({
+  link.props.onclick({
     button: BUTTON_LEFT_CLICK,
     shiftKey: true
   })
