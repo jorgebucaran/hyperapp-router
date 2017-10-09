@@ -12,8 +12,9 @@ export function router(routes) {
       return actions
 
       function enhance(props) {
-        props = Object.assign({ state: {}, actions: {} }, props)
-        const view = props.view
+        props = props || {}
+        props.state = props.state || {}
+        props.actions = props.actions || {}
 
         props.state.router = {}
         props.actions.router = {
@@ -28,6 +29,7 @@ export function router(routes) {
           }
         }
 
+        const view = props.view
         props.view = function (state, actions) {
           const m = match(location.pathname, routes)
           state.router.params = m.params
