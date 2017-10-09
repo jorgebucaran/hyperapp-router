@@ -3,10 +3,17 @@ import { h } from 'hyperapp'
 export function router(routes) {
   return function (app) {
     return function (props) {
-      return app(enhance(props))
+      const actions = app(enhance(props))
+
+      window.addEventListener('popstate', function () {
+        actions.router.set({})
+      })
+
+      return actions
 
       function enhance(props) {
         props = Object.assign({ state: {}, actions: {} }, props)
+        const view = props.view
 
         props.state.router = {}
         props.actions.router = {
@@ -22,13 +29,9 @@ export function router(routes) {
         }
 
         props.view = function (state, actions) {
-          window.onpopstate = function () {
-            actions.router.set({})
-          }
-
           const m = match(location.pathname, routes)
-          const v = routes[m.index][1]
           state.router.params = m.params
+          const v = m.match ? routes[m.index][1] : view
           return v(state, actions)
         }
 
