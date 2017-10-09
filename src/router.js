@@ -1,41 +1,43 @@
-export function router(options) {
-  return function(emit) {
-    return {
-      state: {
-        router: {}
-      },
-      actions: {
-        router: {
-          set: function(state, actions, data) {
-            return {
-              router: data
-            }
+import { h } from 'hyperapp'
+
+export function router(routes) {
+  return function (app) {
+    return function (props) {
+      const actions = app(enhance(props))
+
+      window.addEventListener('popstate', function () {
+        actions.router.set({})
+      })
+
+      return actions
+
+      function enhance(props) {
+        props = props || {}
+        props.state = props.state || {}
+        props.actions = props.actions || {}
+
+        props.state.router = {}
+        props.actions.router = {
+          set: function (state, actions, data) {
+            return data
           },
-          go: function(state, actions, path) {
+          go: function (state, actions, path) {
             if (location.pathname + location.search !== path) {
-              history.pushState({}, "", path)
-              actions.router.set({
-                path: path
-              })
+              history.pushState({}, '', path)
+              actions.set({ path: path })
             }
           }
         }
-      },
-      events: {
-        load: function(state, actions) {
-          addEventListener("popstate", function() {
-            actions.router.set({})
-          })
-        },
-        render: function(state, actions, view) {
-          return view[
-            (state.router.index >= 0
-              ? state
-              : actions.router.set(
-                  emit("route", match(location.pathname, view))
-                )).router.index
-          ][1]
+
+        const view = props.view
+        props.view = function (state, actions) {
+          const m = match(location.pathname, routes)
+          state.router.params = m.params
+          const v = m.match ? routes[m.index][1] : view
+          return v(state, actions)
         }
+
+        return props
       }
     }
   }
@@ -54,19 +56,19 @@ function match(pathname, routes) {
         route === "*"
           ? ".*"
           : "^" +
-            route.replace(/\//g, "\\/").replace(/:([\w]+)/g, function(_, key) {
-              keys.push(key)
-              return "([-\\.%\\w\\(\\)]+)"
-            }) +
-            "/?$",
+          route.replace(/\//g, "\\/").replace(/:([\w]+)/g, function (_, key) {
+            keys.push(key)
+            return "([-\\.%\\w\\(\\)]+)"
+          }) +
+          "/?$",
         "g"
       ),
-      function() {
-        for (var j = 1; j < arguments.length - 2; ) {
+      function () {
+        for (var j = 1; j < arguments.length - 2;) {
           var value = arguments[j++]
           try {
             value = decodeURI(value)
-          } catch (_) {}
+          } catch (_) { }
           params[keys.shift()] = value
         }
         match = route
