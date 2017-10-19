@@ -1,47 +1,18 @@
-export function Router(props, children) {
-  const match = props.actions.router.set(matcher(location.pathname, children))
-  const index = match.path ? match.index : children.length - 1
-  const view = children[index].view
-  return view(props.state, props.actions)
-}
-
-function matcher(pathname, children) {
-  var path
-  var index
-  var params = {}
-
-  for (var i = 0; i < children.length && !path; i++) {
-    var route = children[i].path
-    var keys = []
-    pathname.replace(
-      RegExp(
-        route === "*"
-          ? ".*"
-          : "^" +
-          route.replace(/\//g, "\\/").replace(/:([\w]+)/g, function (_, key) {
-            keys.push(key)
-            return "([-\\.%\\w\\(\\)]+)"
-          }) +
-          "/?$",
-        "g"
-      ),
-      function () {
-        for (var j = 1; j < arguments.length - 2;) {
-          var value = arguments[j++]
-          try {
-            value = decodeURI(value)
-          } catch (_) { }
-          params[keys.shift()] = value
-        }
-        path = route
-        index = i
+export const router = {
+  actions: {
+    set: function (state, actions, data) {
+      return data
+    },
+    go: function (state, actions, path) {
+      if (location.pathname + location.search !== path) {
+        history.pushState({}, "", path)
+        actions.set({ path: path })
       }
-    )
-  }
-
-  return {
-    path: path,
-    index: index,
-    params: params
+    }
+  },
+  init: function (state, actions) {
+    addEventListener("popstate", function () {
+      actions.set({})
+    })
   }
 }
