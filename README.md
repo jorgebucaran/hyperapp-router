@@ -6,29 +6,27 @@
 
 @hyperapp/router provides utilities for routing client-side pages with [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
 
+
+Use the `router` as Hyperapp module. Then compose your routes with components (`Router`, `Route`).
+
+
 [Try it Online](http://hyperapp-router.surge.sh)
 
 ```jsx
-import { router, Link } from "@hyperapp/router"
+import { h, app } from 'hyperapp';
+import { router, Router, Route } from '@hyperapp/router';
 
 app({
-  view: [
-    [
-      "/",
-      (state, actions) =>
-        <Link to="/test" go={actions.router.go}>
-          Test
-        </Link>
-    ],
-    [
-      "/test",
-      (state, actions) =>
-        <Link to="/" go={actions.router.go}>
-          Back
-        </Link>
-    ]
-  ],
-  mixins: [router()]
+  state: { ... },
+  actions: { ... },
+  view: (state, actions) => (
+    <Router state={state} actions={actions}>
+      <Route path="/" component={Home} />
+      <Route path="/login" component={Login} />
+      <Route path="/404" component={NotFound} />
+    </Router>
+  ),
+  modules: { router }
 })
 ```
 
@@ -56,20 +54,6 @@ Then [bundle](https://github.com/hyperapp/hyperapp/blob/master/docs/getting-star
 
 ```jsx
 import { router, Link } from "@hyperapp/router"
-```
-
-## Mixin
-
-Use the router as any other [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/mixins.md). Then compose your view as an array of [routes](#routes).
-
-```jsx
-app({
-  view: [
-    ["/", state => <h1>Hi.</h1>]
-    ["*", state => <h1>404</h1>],
-  ],
-  mixins: [router()]
-})
 ```
 
 ### Routes
