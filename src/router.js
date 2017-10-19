@@ -1,44 +1,16 @@
-import { h } from 'hyperapp'
-
-// router module
-export const router = {
-  actions: {
-    set: function (state, actions, data) {
-      return data
-    },
-    go: function (state, actions, path) {
-      if (location.pathname + location.search !== path) {
-        history.pushState({}, '', path)
-        actions.set({ path: path })
-      }
-    }
-  },
-  init(state, actions) {
-    window.addEventListener('popstate', function () {
-      actions.set({})
-    })
-  }
-}
-
-// Router component
 export function Router(props, children) {
-  const m = match(location.pathname, children)
-  const i = m.match ? m.index : children.length - 1
-  const v = children[i].component
-  return v(props.state, props.actions)
+  const match = props.actions.router.set(matcher(location.pathname, children))
+  const index = match.path ? match.index : children.length - 1
+  const view = children[index].view
+  return view(props.state, props.actions)
 }
 
-// Route component
-export function Route(props, children) {
-  return props
-}
-
-function match(pathname, children) {
-  var match
+function matcher(pathname, children) {
+  var path
   var index
   var params = {}
 
-  for (var i = 0; i < children.length && !match; i++) {
+  for (var i = 0; i < children.length && !path; i++) {
     var route = children[i].path
     var keys = []
     pathname.replace(
@@ -61,14 +33,14 @@ function match(pathname, children) {
           } catch (_) { }
           params[keys.shift()] = value
         }
-        match = route
+        path = route
         index = i
       }
     )
   }
 
   return {
-    match: match,
+    path: path,
     index: index,
     params: params
   }
