@@ -6,29 +6,25 @@
 
 @hyperapp/router provides utilities for routing client-side pages with [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
 
+Include `router` as a module in your app. Then compose your routes with `Router` and `Route` using views.
+
 [Try it Online](http://hyperapp-router.surge.sh)
 
 ```jsx
-import { router, Link } from "@hyperapp/router"
+import { h, app } from "hyperapp";
+import { router, Router, Route } from "@hyperapp/router";
 
 app({
-  view: [
-    [
-      "/",
-      (state, actions) =>
-        <Link to="/test" go={actions.router.go}>
-          Test
-        </Link>
-    ],
-    [
-      "/test",
-      (state, actions) =>
-        <Link to="/" go={actions.router.go}>
-          Back
-        </Link>
-    ]
-  ],
-  mixins: [router()]
+  state: { ... },
+  actions: { ... },
+  view: (state, actions) => (
+    <Router state={state} actions={actions}>
+      <Route path="/" view={Home} />
+      <Route path="/login" view={Login} />
+      <Route path="/404" view={NotFound} />
+    </Router>
+  ),
+  modules: { router }
 })
 ```
 
@@ -43,7 +39,7 @@ Download the minified library from a [CDN](https://unpkg.com/@hyperapp/router).
 Then import from `router`.
 
 ```jsx
-const { router, Link } = router
+const { router, Link, Route, Router } = router
 ```
 
 Or install with npm / Yarn.
@@ -55,38 +51,8 @@ npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router<
 Then [bundle](https://github.com/hyperapp/hyperapp/blob/master/docs/getting-started.md#build-pipeline) and use as you would any other module.
 
 ```jsx
-import { router, Link } from "@hyperapp/router"
+import { router, Link, Route, Router } from "@hyperapp/router"
 ```
-
-## Mixin
-
-Use the router as any other [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/mixins.md). Then compose your view as an array of [routes](#routes).
-
-```jsx
-app({
-  view: [
-    ["/", state => <h1>Hi.</h1>]
-    ["*", state => <h1>404</h1>],
-  ],
-  mixins: [router()]
-})
-```
-
-### Routes
-
-A route is a tuple that consists of a [path](#paths) and a [view](https://github.com/hyperapp/hyperapp/blob/master/docs/view.md).
-
-<pre>
-[string, <a href="https://github.com/hyperapp/hyperapp/blob/master/docs/api.md#view">View</a>]
-</pre>
-
-Routes are matched in the following three scenarios:
-
-- After the page is loaded.
-- When the browser fires a [popstate](https://developer.mozilla.org/en-US/docs/Web/Events/popstate) event.
-- When [actions.router.go](#actionsroutergo) is called.
-
-If [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location) matches the path of a supplied route, we'll render its view.
 
 ### Paths
 
@@ -102,7 +68,7 @@ Match location.pathname using `[A-Za-z0-9]+` and save the matched path to [state
 
 Match anything. Declaration order dictates matching precedence. If you are using `*`, declare it last.
 
-### state.router.match
+### state.router.path
 
 The matched path.
 
@@ -130,23 +96,6 @@ Update [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Loca
 
 <pre>
 actions.router.go(<a href="#paths">path</a>)
-</pre>
-
-### events.route
-
-Use route to make a network request, parse [location.search](https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/search), etc. This event is fired when a new route is matched.
-
-<pre>
-<a id="routeevent"></a>route(<a href="#state">State</a>, <a href="#actions">Actions</a>, <a href="#routeinfo">RouteInfo</a>): <a href="#routeinfo">RouteInfo</a>
-</pre>
-
-#### RouteInfo
-
-<pre>
-{
-  match: string,
-  params: any
-}
 </pre>
 
 ## Link
