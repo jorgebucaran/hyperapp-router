@@ -1,8 +1,12 @@
 export function Router(props, children) {
+  const route = routeMatch(props, children)
+  return route.view(props.state, props.actions)
+}
+
+function routeMatch(props, children) {
   const match = props.actions.router.set(matcher(location.pathname, children))
   const index = match.path ? match.index : children.length - 1
-  const view = children[index].view
-  return view(props.state, props.actions)
+  return children[index]
 }
 
 function matcher(pathname, children) {
