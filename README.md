@@ -111,10 +111,10 @@ Use the Link component to update the windows location and navigate between views
 
 ### Redirect
 
-Use the Redirect component to guard routes based on certain conditions. When rendered it calls `history.replaceState` and updates the state which triggers [Route](#Route) matching.
+Use the Redirect component to guard routes based on certain conditions. If the `when` prop evaluates to true `history.replaceState` is called and the state is updated which triggers [Route](#Route) matching.
 
 ```js
-{ !state.user && <Redirect to='/login' /> }
+<Redirect to="/login" when={!state.user} />
 ```
 
 ### Popstate
