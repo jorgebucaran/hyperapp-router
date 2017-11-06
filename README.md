@@ -131,10 +131,10 @@ Use the Switch component when you want to ensure only one out of an array of rou
 
 ```js
 <Switch>
-  <Route path="/" exact={true} component={Home}/>
-  <Route path="/about" component={About}/>
-  <Route path="/:user" component={User}/>
-  <Route component={Lost}/>
+  <Route path="/" exact={true} view={Home}/>
+  <Route path="/about" view={About}/>
+  <Route path="/:user" view={User}/>
+  <Route view={Lost}/>
 </Switch>
 ```
 
