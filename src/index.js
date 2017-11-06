@@ -1,8 +1,8 @@
-export { Popstate } from './views/Popstate'
-export { Route } from './views/Route'
-export { Redirect } from './views/Redirect'
-export { Link } from './views/Link'
-export { Switch } from './views/Switch'
+export { Popstate } from './components/Popstate'
+export { Route } from './components/Route'
+export { Redirect } from './components/Redirect'
+export { Link } from './components/Link'
+export { Switch } from './components/Switch'
 
 export default {
   state: {

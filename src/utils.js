@@ -1,4 +1,4 @@
-const extractParams = route => {
+export const extractParams = route => {
   var params = {}
   var keys = []
   location.pathname.replace(
@@ -24,7 +24,7 @@ const extractParams = route => {
   return params
 }
 
-const extractQuery = queryString => {
+export const extractQuery = queryString => {
   var query = {}
   var pairs = (queryString[0] === '?'
     ? queryString.substr(1)
@@ -35,15 +35,4 @@ const extractQuery = queryString => {
     query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '')
   }
   return query
-}
-
-export const Route = ({ exact, path = '', view }) => {
-  const match = exact
-    ? location.pathname === path
-    : location.pathname.match(
-        path.replace(/\//g, '\\/').replace(/:([\w]+)/g, '([-\\.%\\w\\(\\)]+)')
-      )
-  const params = extractParams(path)
-  const query = extractQuery(location.search)
-  return match && view({ path, params, query })
 }
