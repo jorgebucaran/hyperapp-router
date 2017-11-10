@@ -33,7 +33,12 @@ Register the router as a [module](https://github.com/hyperapp/hyperapp/blob/mast
 ```jsx
 
 app({
-  modules: { router },
+  state: {
+    router: router.state
+  },
+  actions: {
+    router: router.state  
+  },
   view: (state, actions) =>
     <main>
       <Route path="/" exact="true" view={() => <h1>Hi</h1>} />
@@ -49,7 +54,7 @@ The router package exports a collection of view components as well as the main m
 
 ### Route
 
-Use the Route component to decide what UI gets shown on certain URLs. Route matches are evaluated every render. If a route doesn't match it returns `false` and is not rendered, otherwise the routes [view](#view) is rendered. A match occurs if the [location.pathname]() [matches]() the routes [path](#path). A route with no path is always matches. Routes work as expected when nested inside other routes.
+Use the Route component to decide what UI gets shown on certain URLs. Route matches are evaluated every render. If a route doesn't match it returns `false` and is not rendered, otherwise the routes [view](#view) is rendered. A match occurs if the window URL inclusively matches the routes [path](#path). A route with no path is always matches. Routes work as expected when nested inside other routes.
 
 ```js
 <Route

@@ -6,13 +6,13 @@ export const Popstate = ({ update }) => {
     const pushState = history.pushState
     history.pushState = function() {
       pushState.apply(history, arguments)
-      update()
+      typeof update === 'function' && update()
     }
     // Update path when a replaceState occurs
     const replaceState = history.replaceState
     history.replaceState = function() {
       replaceState.apply(history, arguments)
-      update()
+      typeof update === 'function' && update()
     }
     // Update path when ever the window url changes
     addEventListener('popstate', update)

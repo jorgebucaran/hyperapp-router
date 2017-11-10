@@ -9,19 +9,33 @@
   "license": "MIT",
   "repository": "hyperapp/router",
   "files": ["src", "dist"],
-  "author": "Luke Jackson",
+  "author": "Luke Jackson (lukejacksonn@gmail.com)",
   "keywords": ["hyperapp", "router"],
   "scripts": {
-    "build":
+    "build": "npm run bundle && npm run compile && npm run minify",
+    "compile": "babel src/index.js --out-file src/index.js --presets=env",
+    "bundle":
       "rollup -i src/index.js -g hyperapp:hyperapp -o dist/router.js -f umd -mn router",
+    "minify":
+      "uglifyjs dist/router.js -o dist/router.js --mangle --compress warnings=false --pure-funcs=Object.defineProperty -p relative --in-source-map dist/router.js.map --source-map dist/router.js.map",
+    "format":
+      "prettier --semi false --write 'src/**/*.js' '{,test/ts/}*.{ts,tsx}'",
     "release":
       "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
+  },
+  "babel": {
+    "presets": "env"
   },
   "peerDependencies": {
     "hyperapp": "^0.16.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "1.6.1",
     "hyperapp": "^0.16.0",
-    "rollup": "^0.50.0"
+    "jest": "^21.2.1",
+    "prettier": "^1.8.2",
+    "rollup": "^0.51.2",
+    "uglify-js": "^2.7.5"
   }
 }
