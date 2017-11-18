@@ -37,12 +37,17 @@ app({
     router: router.state
   },
   actions: {
-    router: router.state  
+    router: router.actions  
   },
   view: (state, actions) =>
     <main>
-      <Route path="/" exact="true" view={() => <h1>Hi</h1>} />
-      <Route path="/adventure" view={() => <h1>Bye</h1>} />
+      <Popstate update={actions.router.update}/>
+      <Link href="/">Home</Link>
+      <Link href="/away">Away</Link>
+      <Switch>
+        <Route path="/" exact view={() => <h1>Hi</h1>}/>
+        <Route view={() => <h1>Bye</h1>}/>
+      </Switch>
     </main>
   ,
 })
@@ -88,13 +93,11 @@ When `true`, will only match if the route's path matches the `location.pathname`
 
 #### view: Component
 
-A route's `view` is itself a component. It gets passed an arguments object.
+A route's `view` is itself a component. It gets passed an arguments object containing data extracted from the matching location.
+
+> Example URL: `/game/chess/?level=expert`
 
 ```js
-
-// Example URL
-// /game/chess/?level=expert
-
 {
   path: "/game/:id",
   params: { id: "chess" },
@@ -111,7 +114,7 @@ A route's `view` is itself a component. It gets passed an arguments object.
 Use the Link component to update the windows location and navigate between views without reloading the page. It gets rendered an an `a` tag with the appropriate `href`. When clicked it calls `history.pushState` and updates the state which triggers [Route](#Route) matching.
 
 ```js
-<Link to='/neverland?by=pixiedust' />
+<Link href='/neverland?by=pixiedust'/>Come on nana</Link>
 ```
 
 ### Redirect
@@ -119,15 +122,15 @@ Use the Link component to update the windows location and navigate between views
 Use the Redirect component to guard routes based on certain conditions. If the `when` prop evaluates to true `history.replaceState` is called and the state is updated which triggers [Route](#Route) matching.
 
 ```js
-<Redirect to="/login" when={!state.user} />
+<Redirect to="/login" when={!state.user}/>
 ```
 
 ### Popstate
 
 The Popstate component is required to notify your app when the windows location changes. It updates `state.router.path` every time `history.pushState` or `history.replaceState` is called, including when the user navigates the browser forward and backwards. Place this before any [Routes](#Routes) or [Redirects](#Redirects)
 
-```
-Popstate({ update: actions.router.update })
+```js
+<Popstate update={actions.router.update}/>
 ```
 
 ### Switch

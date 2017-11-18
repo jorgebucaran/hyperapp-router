@@ -1,16 +1,23 @@
 import { h } from 'hyperapp'
 
-export const Link = ({ to = '#' }, children) =>
+export const Link = ({ href = '#', target }, children) =>
   h(
     'a',
     {
-      href: to,
+      href,
+      target,
       onclick: e => {
-        // Prevent the page from reloading
-        e.preventDefault()
-        // Don't navigate to the same location
-        location.pathname + location.search !== to &&
-          history.pushState(null, null, to)
+        if (
+          !e.metaKey &&
+          !e.altKey &&
+          !e.ctrlKey &&
+          !e.shiftKey &&
+          target !== '_blank'
+        ) {
+          location.pathname + location.search !== href &&
+            history.pushState(null, null, href)
+          e.preventDefault()
+        }
       },
     },
     children
