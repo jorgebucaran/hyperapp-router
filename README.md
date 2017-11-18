@@ -4,32 +4,16 @@
 [![npm](https://img.shields.io/npm/v/@hyperapp/router.svg)](https://www.npmjs.org/package/hyperapp)
 [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
-@hyperapp/router provides utilities for routing client-side pages with [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
+@hyperapp/router provides state, actions and components for routing client-side pages with [HyperApp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
+
+## Installation
+
+Using [npm](https://npmjs.com):
 
 [Try it Online](http://hyperapp-router.surge.sh)
 
 ```jsx
-import { router, Link } from "@hyperapp/router"
-
-app({
-  view: [
-    [
-      "/",
-      (state, actions) =>
-        <Link to="/test" go={actions.router.go}>
-          Test
-        </Link>
-    ],
-    [
-      "/test",
-      (state, actions) =>
-        <Link to="/" go={actions.router.go}>
-          Back
-        </Link>
-    ]
-  ],
-  mixins: [router()]
-})
+import router, { Route } from "@hyperapp/router"
 ```
 
 ## Installation
@@ -40,132 +24,129 @@ Download the minified library from a [CDN](https://unpkg.com/@hyperapp/router).
 <script src="https://unpkg.com/@hyperapp/router"></script>
 ```
 
-Then import from `router`.
+Then access the router in the global scope as <samp>router</samp>.
+
+## Usage
+
+Register the routers state and actions in your app. Then use the router components in your view.
 
 ```jsx
-const { router, Link } = router
-```
 
-Or install with npm / Yarn.
-
-<pre>
-npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router</a>
-</pre>
-
-Then [bundle](https://github.com/hyperapp/hyperapp/blob/master/docs/getting-started.md#build-pipeline) and use as you would any other module.
-
-```jsx
-import { router, Link } from "@hyperapp/router"
-```
-
-## Mixin
-
-Use the router as any other [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/mixins.md). Then compose your view as an array of [routes](#routes).
-
-```jsx
 app({
-  view: [
-    ["/", state => <h1>Hi.</h1>]
-    ["*", state => <h1>404</h1>],
-  ],
-  mixins: [router()]
+  state: {
+    router: router.state
+  },
+  actions: {
+    router: router.actions  
+  },
+  view: (state, actions) =>
+    <main>
+      <Popstate update={actions.router.update}/>
+      <Link href="/">Home</Link>
+      <Link href="/away">Away</Link>
+      <Switch>
+        <Route path="/" exact view={() => <h1>Hi</h1>}/>
+        <Route view={() => <h1>Bye</h1>}/>
+      </Switch>
+    </main>
+  ,
 })
 ```
 
-### Routes
+## Components
 
-A route is a tuple that consists of a [path](#paths) and a [view](https://github.com/hyperapp/hyperapp/blob/master/docs/view.md).
+The router package exports a collection of view components as well as the main module. Use these components in various configurations to suit your specific routing requirements.
 
-<pre>
-[string, <a href="https://github.com/hyperapp/hyperapp/blob/master/docs/api.md#view">View</a>]
-</pre>
+### Route
 
-Routes are matched in the following three scenarios:
+Use the Route component to decide what UI gets shown on certain URLs. Route matches are evaluated every render. If a route doesn't match it returns `false` and is not rendered, otherwise the routes [view](#view) is rendered. A match occurs if the window URL inclusively matches the routes [path](#path). A route with no path is always matches. Routes work as expected when nested inside other routes.
 
-- After the page is loaded.
-- When the browser fires a [popstate](https://developer.mozilla.org/en-US/docs/Web/Events/popstate) event.
-- When [actions.router.go](#actionsroutergo) is called.
-
-If [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location) matches the path of a supplied route, we'll render its view.
-
-### Paths
-
-#### `/`, `/foo`
-
-Match if location.pathname is `/`, `/foo`, etc.
-
-#### `/:key`
-
-Match location.pathname using `[A-Za-z0-9]+` and save the matched path to [state.router.params](#staterouterparams).
-
-#### `*`
-
-Match anything. Declaration order dictates matching precedence. If you are using `*`, declare it last.
-
-### state.router.match
-
-The matched path.
-
-<pre>
-string
-</pre>
-
-### state.router.params
-
-The matched path params.
-
-<pre>
-{
-  [key]: string
-}
-</pre>
-
-|path                 |location.pathname    |state.router.params  |
-|----------------------|---------------------|---------------------|
-|`/:foo`               |/hyper               | { foo: "hyper" }    |
-
-### actions.router.go
-
-Update [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location) with the supplied path.
-
-<pre>
-actions.router.go(<a href="#paths">path</a>)
-</pre>
-
-### events.route
-
-Use route to make a network request, parse [location.search](https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/search), etc. This event is fired when a new route is matched.
-
-<pre>
-<a id="routeevent"></a>route(<a href="#state">State</a>, <a href="#actions">Actions</a>, <a href="#routeinfo">RouteInfo</a>): <a href="#routeinfo">RouteInfo</a>
-</pre>
-
-#### RouteInfo
-
-<pre>
-{
-  match: string,
-  params: any
-}
-</pre>
-
-## Link
-
-Use `Link` to create hyperlinks that map to a [route](#routes).
-
-```jsx
-<Link to="/" go={actions.router.go}>Back Home</Link>
+```js
+<Route
+  path="/"
+  exact={true}
+  view={Component}
+/>
 ```
 
-### to
+#### path: string
 
-A route [path](#paths).
+Any valid URL path with named parameters (defined by a colon prefix `/:foo`).
 
-### go
+```
+<Route path="/users/:id" view={User}/>
+```
 
-A function that will be called with the supplied path when the hyperlink is clicked.
+#### exact: bool
+
+When `true`, will only match if the route's path matches the `location.pathname` _exactly_.
+
+```js
+<Route path="/one" exact={true} component={Love} />
+```
+
+| path | location.pathname | exact | matches? |
+| --- | --- | --- | --- |
+| `/one`  | `/one/two`  | `true` | no |
+| `/one`  | `/one/two`  | `false` | yes |
+
+
+#### view: Component
+
+A route's `view` is itself a component. It gets passed an arguments object containing data extracted from the matching location.
+
+> Example URL: `/game/chess/?level=expert`
+
+```js
+{
+  path: "/game/:id",
+  params: { id: "chess" },
+  query: { level: "expert" },
+}
+```
+
+- `params` are extracted from any named parameters in the path
+- `query` object contains data extracted from location.search
+
+
+### Link
+
+Use the Link component to update the windows location and navigate between views without reloading the page. It gets rendered an an `a` tag with the appropriate `href`. When clicked it calls `history.pushState` and updates the state which triggers [Route](#Route) matching.
+
+```js
+<Link href='/neverland?by=pixiedust'/>Come on nana</Link>
+```
+
+### Redirect
+
+Use the Redirect component to guard routes based on certain conditions. If the `when` prop evaluates to true `history.replaceState` is called and the state is updated which triggers [Route](#Route) matching.
+
+```js
+<Redirect to="/login" when={!state.user}/>
+```
+
+### Popstate
+
+The Popstate component is required to notify your app when the windows location changes. It updates `state.router.path` every time `history.pushState` or `history.replaceState` is called, including when the user navigates the browser forward and backwards. Place this before any [Routes](#Routes) or [Redirects](#Redirects)
+
+```js
+<Popstate update={actions.router.update}/>
+```
+
+### Switch
+
+Use the Switch component when you want to ensure only one out of an array of routes is rendered. It always will render the first matching child only.
+
+```js
+<Switch>
+  <Route path="/" exact={true} view={Home}/>
+  <Route path="/about" view={About}/>
+  <Route path="/:user" view={User}/>
+  <Route view={Lost}/>
+</Switch>
+```
+
 
 ## License
 
 @hyperapp/router is MIT licensed. See [LICENSE](LICENSE.md).
-
