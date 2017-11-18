@@ -13,7 +13,7 @@
   "keywords": ["hyperapp", "router"],
   "scripts": {
     "build": "npm run bundle && npm run compile && npm run minify",
-    "compile": "babel src/index.js --out-file src/index.js --presets=env",
+    "compile": "babel dist/router.js --out-file dist/router.js --presets=env",
     "bundle":
       "rollup -i src/index.js -g hyperapp:hyperapp -o dist/router.js -f umd -mn router",
     "minify":
