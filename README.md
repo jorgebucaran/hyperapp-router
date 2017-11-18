@@ -4,7 +4,7 @@
 [![npm](https://img.shields.io/npm/v/@hyperapp/router.svg)](https://www.npmjs.org/package/hyperapp)
 [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
-@hyperapp/router provides a state/actions module and components for routing client-side pages with [HyperApp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
+@hyperapp/router provides state, actions and components for routing client-side pages with [HyperApp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
 
 ## Installation
 
@@ -26,9 +26,9 @@ Download the minified library from a [CDN](https://unpkg.com/@hyperapp/router).
 
 Then access the router in the global scope as <samp>router</samp>.
 
-## Mixin
+## Usage
 
-Register the router as a [module](https://github.com/hyperapp/hyperapp/blob/master/docs/modules.md) in your app. Then use the router components in your view.
+Register the routers state and actions in your app. Then use the router components in your view.
 
 ```jsx
 
