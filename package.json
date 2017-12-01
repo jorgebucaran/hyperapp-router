@@ -1,7 +1,7 @@
 {
   "name": "@hyperapp/router",
   "description": "Utilities for routing client-side pages with Hyperapp.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "dist/router.js",
   "jsnext:main": "src/index.js",
   "module": "src/index.js",
@@ -26,24 +26,24 @@
   "scripts": {
     "test": "jest --coverage --no-cache",
     "build": "npm run bundle && npm run minify",
-    "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn router",
-    "minify": "uglifyjs dist/router.js -o dist/router.js --mangle --compress warnings=false --pure-funcs=Object.defineProperty -p relative --source-map dist/router.js.map",
+    "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn router -g hyperapp:hyperapp",
+    "minify": "uglifyjs dist/router.js -o dist/router.js --mangle --compress warnings=false --pure-funcs=Object.defineProperty -p relative --in-source-map dist/router.js.map --source-map dist/router.js.map",
     "prepublish": "npm run build",
     "format": "prettier --semi false --write 'src/**/*.js'",
     "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "babel": {
-    "presets": "es2015"
+    "presets": "env"
   },
   "devDependencies": {
-    "babel-preset-es2015": "^6.24.1",
-    "hyperapp": "^0.12.0",
-    "jest": "^20.0.4",
-    "prettier": "~1.5.3",
-    "rollup": "^0.47.6",
+    "babel-preset-env": "^1.6.1",
+    "hyperapp": "*",
+    "jest": "^21.2.1",
+    "prettier": "^1.8.2",
+    "rollup": "^0.52.0",
     "uglify-js": "^2.7.5"
   },
   "peerDependencies": {
-    "hyperapp": "^0.12.0"
+    "hyperapp": "*"
   }
 }
