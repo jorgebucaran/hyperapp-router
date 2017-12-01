@@ -1,25 +1,32 @@
 import { h } from "hyperapp"
 
 export function Link(props, children) {
-  props.href = props.to
-  props.to = null
+  var href = props.to
+  var location = props.location || window.location
 
-  props.onclick = function(event) {
-    if (
-      event.button !== 0 ||
-      event.metaKey ||
-      event.altKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      props.target === "_blank" ||
-      event.currentTarget.origin !== window.location.origin
-    ) {
-      return
-    }
+  return h(
+    "a",
+    {
+      href: href,
+      onclick: function(e) {
+        if (
+          e.button !== 0 ||
+          e.altKey ||
+          e.metaKey ||
+          e.ctrlKey ||
+          e.shiftKey ||
+          props.target === "_blank" ||
+          e.currentTarget.origin !== location.origin
+        ) {
+        } else {
+          e.preventDefault()
 
-    event.preventDefault()
-    props.go(props.href)
-  }
-
-  return h("a", props, children)
+          if (location.pathname !== href) {
+            history.pushState(location.pathname, "", href)
+          }
+        }
+      }
+    },
+    children
+  )
 }
