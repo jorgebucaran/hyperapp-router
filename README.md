@@ -115,16 +115,6 @@ Then call `subscribe` to listen to location change events.
 location.subscribe(actions.location)
 ```
 
-## Modules
-
-### location
-
-#### pathname
-#### previous
-
-#### go
-
-
 ## Components
 
 ### Route
@@ -148,6 +138,23 @@ The path to match against the current location.
 #### render
 
 The component to render when a match occurs.
+
+#### props
+
+Rendered components are passed the following props.
+
+##### match.url
+
+The matched part of the url. Use to assemble links inside routes. See Link.
+
+##### match.path
+
+The route path. Same as path.
+
+#####  match.isExact
+
+Indicates whether the given path matched the url exactly or not. I am still debating whether we need this or not.
+
 
 ### Link
 
@@ -221,6 +228,22 @@ Use the Switch component when you want to ensure only one out of several routes 
   <Route view={NoMatch} />
 </Switch>
 ```
+
+## Modules
+
+### location
+
+#### pathname
+
+Same as window.location.pathname.
+
+#### previous
+
+The previous location.pathname. Useful when redirecting back to the referrer url/pathname after leaving a guarded/protected route.
+
+#### go(url)
+
+Navigate to the given url.
 
 ## License
 
