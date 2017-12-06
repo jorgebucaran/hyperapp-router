@@ -11,7 +11,7 @@ export function Route(props) {
 
   return (
     match &&
-    props.view({
+    props.render({
       location: location,
       match: match
     })

@@ -14,20 +14,14 @@
   "author": "Jorge Bucaran",
   "keywords": [
     "hyperapp",
-    "react",
-    "elm",
-    "jsx",
-    "virtual dom",
-    "vdom",
-    "hyperx",
-    "hyperscript",
-    "router"
+    "router",
+    "navigation"
   ],
   "scripts": {
     "test": "jest --coverage --no-cache",
     "build": "npm run bundle && npm run minify",
     "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn router -g hyperapp:hyperapp",
-    "minify": "uglifyjs dist/router.js -o dist/router.js --mangle --compress warnings=false --pure-funcs=Object.defineProperty -p relative --in-source-map dist/router.js.map --source-map dist/router.js.map",
+    "minify": "uglifyjs dist/router.js -o dist/router.js -mc pure_funcs=Object.defineProperty --source-map includeSources,url=router.js.map",
     "prepublish": "npm run build",
     "format": "prettier --semi false --write 'src/**/*.js'",
     "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
@@ -41,7 +35,7 @@
     "jest": "^21.2.1",
     "prettier": "^1.8.2",
     "rollup": "^0.52.0",
-    "uglify-js": "^2.7.5"
+    "uglify-js": "3.2.1"
   },
   "peerDependencies": {
     "hyperapp": "*"
