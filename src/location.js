@@ -1,11 +1,7 @@
-var pathname = location.pathname
-var PUSHSTATE = "pushstate"
-var POPSTATE = "popstate"
-
-export default {
+export var location = {
   state: {
-    pathname: pathname,
-    previous: pathname
+    pathname: window.location.pathname,
+    previous: window.location.pathname
   },
   actions: {
     go: function(pathname) {
@@ -18,19 +14,21 @@ export default {
   subscribe: function(actions) {
     var unwrap = wrapHistory(["pushState", "replaceState"])
 
-    addEventListener(PUSHSTATE, handleLocationChange)
-    addEventListener(POPSTATE, handleLocationChange)
+    addEventListener("pushstate", handleLocationChange)
+    addEventListener("popstate", handleLocationChange)
 
     return function() {
-      removeEventListener(PUSHSTATE, handleLocationChange)
-      removeEventListener(POPSTATE, handleLocationChange)
+      removeEventListener("pushstate", handleLocationChange)
+      removeEventListener("popstate", handleLocationChange)
       unwrap()
     }
 
     function handleLocationChange(e) {
       actions.set({
-        pathname: location.pathname,
-        previous: e.detail ? (location.previous = e.detail) : location.previous
+        pathname: window.location.pathname,
+        previous: e.detail
+          ? (window.location.previous = e.detail)
+          : window.location.previous
       })
     }
   }
@@ -42,11 +40,7 @@ function wrapHistory(keys) {
 
     history[key] = function(data, title, url) {
       method.call(this, data, title, url)
-      dispatchEvent(
-        new CustomEvent("pushstate", {
-          detail: data
-        })
-      )
+      dispatchEvent(new CustomEvent("pushstate", { detail: data }))
     }
 
     return function() {

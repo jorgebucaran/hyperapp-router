@@ -12,7 +12,7 @@ export function parseRoute(path, url, options) {
   }
 
   for (var i = 0, params = {}, len = paths.length, url = ""; i < len; i++) {
-    if (58 === paths[i].charCodeAt(0)) {
+    if (":" === paths[i][0]) {
       try {
         params[paths[i].slice(1)] = urls[i] = decodeURI(urls[i])
       } catch (_) {
@@ -33,6 +33,6 @@ export function parseRoute(path, url, options) {
 }
 
 function trimTrailingSlash(url) {
-  for (var len = url.length; 47 === url.charCodeAt(--len); );
+  for (var len = url.length; "/" === url[--len]; );
   return url.slice(0, len + 1)
 }

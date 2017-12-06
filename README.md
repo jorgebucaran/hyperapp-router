@@ -4,32 +4,68 @@
 [![npm](https://img.shields.io/npm/v/@hyperapp/router.svg)](https://www.npmjs.org/package/hyperapp)
 [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
-@hyperapp/router provides utilities for routing client-side pages with [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
+@hyperapp/router provides components for routing client-side pages with [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
 
 [Try it Online](http://hyperapp-router.surge.sh)
 
 ```jsx
-import { router, Link } from "@hyperapp/router"
+import { h, app } from "hyperapp"
+import { location, Link, Route } from "@hyperapp/router"
 
-app({
-  view: [
-    [
-      "/",
-      (state, actions) =>
-        <Link to="/test" go={actions.router.go}>
-          Test
-        </Link>
-    ],
-    [
-      "/test",
-      (state, actions) =>
-        <Link to="/" go={actions.router.go}>
-          Back
-        </Link>
-    ]
-  ],
-  mixins: [router()]
+const homeView = () => <h2>Home</h2>
+const aboutView = () => <h2>About</h2>
+const topicsView = ({ match }) => (
+  <div>
+    <h2>Topics</h2>
+    <ul>
+      <li>
+        <Link to={`${match.url}/components`}>Components</Link>
+      </li>
+      <li>
+        <Link to={`${match.url}/single-state-tree`}>Single State Tree</Link>
+      </li>
+      <li>
+        <Link to={`${match.url}/routing`}>Routing</Link>
+      </li>
+    </ul>
+
+    {match.isExact && <h3>Please select a topic.</h3>}
+
+    <Route parent path={`${match.path}/:topicId`} view={topicView} />
+  </div>
+)
+const topicView = ({ match }) => <h3>{match.params.topicId}</h3>
+
+const actions = app({
+  state: {
+    location: location.state
+  },
+  actions: {
+    location: location.actions
+  },
+  view: state =>
+    <div>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/about">About</Link>
+        </li>
+        <li>
+          <Link to="/topics">Topics</Link>
+        </li>
+      </ul>
+
+      <hr />
+
+      <Route path="/" view={homeView} />
+      <Route path="/about" view={aboutView} />
+      <Route parent path="/topics" view={topicsView} />
+    </div>
 })
+
+location.subscribe(actions.location)
 ```
 
 ## Installation
@@ -43,7 +79,7 @@ Download the minified library from a [CDN](https://unpkg.com/@hyperapp/router).
 Then import from `router`.
 
 ```jsx
-const { router, Link } = router
+const { location, Route, Link } = router
 ```
 
 Or install with npm / Yarn.
@@ -52,120 +88,140 @@ Or install with npm / Yarn.
 npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router</a>
 </pre>
 
-Then [bundle](https://github.com/hyperapp/hyperapp/blob/master/docs/getting-started.md#build-pipeline) and use as you would any other module.
+Then with a module bundler like [Rollup](https://github.com/rollup/rollup) or [Webpack](https://github.com/webpack/webpack), use as you would anything else.
 
 ```jsx
-import { router, Link } from "@hyperapp/router"
+import { location, Route, Link } from "@hyperapp/router"
 ```
 
-## Mixin
+## Usage
 
-Use the router as any other [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/mixins.md). Then compose your view as an array of [routes](#routes).
+Add the `location` state and actions to your application.
 
 ```jsx
-app({
-  view: [
-    ["/", state => <h1>Hi.</h1>]
-    ["*", state => <h1>404</h1>],
-  ],
-  mixins: [router()]
+const actions = app({
+  state: {
+    location: location.state
+  },
+  actions: {
+    location: location.actions
+  }
 })
 ```
 
-### Routes
+Then call `subscribe` to listen to location change events.
 
-A route is a tuple that consists of a [path](#paths) and a [view](https://github.com/hyperapp/hyperapp/blob/master/docs/view.md).
-
-<pre>
-[string, <a href="https://github.com/hyperapp/hyperapp/blob/master/docs/api.md#view">View</a>]
-</pre>
-
-Routes are matched in the following three scenarios:
-
-- After the page is loaded.
-- When the browser fires a [popstate](https://developer.mozilla.org/en-US/docs/Web/Events/popstate) event.
-- When [actions.router.go](#actionsroutergo) is called.
-
-If [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location) matches the path of a supplied route, we'll render its view.
-
-### Paths
-
-#### `/`, `/foo`
-
-Match if location.pathname is `/`, `/foo`, etc.
-
-#### `/:key`
-
-Match location.pathname using `[A-Za-z0-9]+` and save the matched path to [state.router.params](#staterouterparams).
-
-#### `*`
-
-Match anything. Declaration order dictates matching precedence. If you are using `*`, declare it last.
-
-### state.router.match
-
-The matched path.
-
-<pre>
-string
-</pre>
-
-### state.router.params
-
-The matched path params.
-
-<pre>
-{
-  [key]: string
-}
-</pre>
-
-|path                 |location.pathname    |state.router.params  |
-|----------------------|---------------------|---------------------|
-|`/:foo`               |/hyper               | { foo: "hyper" }    |
-
-### actions.router.go
-
-Update [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location) with the supplied path.
-
-<pre>
-actions.router.go(<a href="#paths">path</a>)
-</pre>
-
-### events.route
-
-Use route to make a network request, parse [location.search](https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/search), etc. This event is fired when a new route is matched.
-
-<pre>
-<a id="routeevent"></a>route(<a href="#state">State</a>, <a href="#actions">Actions</a>, <a href="#routeinfo">RouteInfo</a>): <a href="#routeinfo">RouteInfo</a>
-</pre>
-
-#### RouteInfo
-
-<pre>
-{
-  match: string,
-  params: any
-}
-</pre>
-
-## Link
-
-Use `Link` to create hyperlinks that map to a [route](#routes).
-
-```jsx
-<Link to="/" go={actions.router.go}>Back Home</Link>
+```js
+location.subscribe(actions.location)
 ```
 
-### to
+## Modules
 
-A route [path](#paths).
+### location
 
-### go
+#### pathname
+#### previous
 
-A function that will be called with the supplied path when the hyperlink is clicked.
+#### go
+
+
+## Components
+
+### Route
+
+Render some UI when the current [window location](https://developer.mozilla.org/en-US/docs/Web/API/Location) matches the given path. A route with no path always matches. Routes work as expected when nested inside other routes.
+
+```jsx
+<Route path="/" render={homeView} />
+<Route path="/about" render={aboutView} />
+<Route parent path="/topics" render={topicsView} />
+```
+
+#### parent
+
+The route contains child routes.
+
+#### path
+
+The path to match against the current location.
+
+#### render
+
+The component to render when a match occurs.
+
+### Link
+
+Use the Link component to update the current [window location](https://developer.mozilla.org/en-US/docs/Web/API/Location) and navigate between views without a page reload. The new location will be pushed to the history stack using `history.pushState`.
+
+```jsx
+<ul>
+  <li>
+    <Link to="/">Home</Link>
+  </li>
+  <li>
+    <Link to="/about">About</Link>
+  </li>
+  <li>
+    <Link to="/topics">Topics</Link>
+  </li>
+</ul>
+```
+
+#### to
+
+The link's destination.
+
+### Redirect
+
+Use the Redirect component to navigate to a new location. The new location will override the current location in the history stack using `history.replaceState`.
+
+```jsx
+const Login = ({ from, login, redirectToReferrer }) => props => {
+  if (redirectToReferrer) {
+    return <Redirect to={from} />
+  }
+
+  return (
+    <div>
+      <p>
+        You must log in to view the page at {from}.
+      </p>
+      <button
+        onclick={() => {
+          auth.authenticate(userId => login(userId))
+        }}
+      >
+        Log in
+      </button>
+    </div>
+  )
+}
+```
+
+#### to
+
+The redirect's destination.
+
+#### from
+
+Overwrite the previous pathname. See [location.previous](#previous).
+
+### Switch
+
+Use the Switch component when you want to ensure only one out of several routes is rendered. It always renders the first matching child.
+
+```jsx
+<Switch>
+  <Route path="/" view={Home} />
+  <Route
+    path="/old-match"
+    view={() => <Redirect from="/old-match" to="/will-match" />}
+  />
+  <Route path="/will-match" view={WillMatch} />
+  <Route view={NoMatch} />
+</Switch>
+```
 
 ## License
 
 @hyperapp/router is MIT licensed. See [LICENSE](LICENSE.md).
-
