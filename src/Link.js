@@ -18,7 +18,7 @@ export function Link(props, children) {
     } else {
       e.preventDefault()
 
-      if (location.pathname !== to) {
+      if (to !== location.pathname) {
         history.pushState(location.pathname, "", to)
       }
     }

@@ -2,18 +2,15 @@ import { parseRoute } from "./parseRoute"
 
 export function Route(props) {
   var location = props.location || window.location
-  var path = props.path
-  var match =
-    !path ||
-    parseRoute(path, location.pathname, {
-      exact: !props.parent
-    })
+  var match = parseRoute(props.path, location.pathname, {
+    exact: !props.parent
+  })
 
   return (
     match &&
     props.render({
-      location: location,
-      match: match
+      match: match,
+      location: location
     })
   )
 }

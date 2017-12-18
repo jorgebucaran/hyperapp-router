@@ -1,3 +1,19 @@
+function wrapHistory(keys) {
+  return keys.reduce(function(next, key) {
+    var fn = history[key]
+
+    history[key] = function(data, title, url) {
+      fn.call(this, data, title, url)
+      dispatchEvent(new CustomEvent("pushstate", { detail: data }))
+    }
+
+    return function() {
+      history[key] = fn
+      next && next()
+    }
+  }, null)
+}
+
 export var location = {
   state: {
     pathname: window.location.pathname,
@@ -12,6 +28,15 @@ export var location = {
     }
   },
   subscribe: function(actions) {
+    function handleLocationChange(e) {
+      actions.set({
+        pathname: window.location.pathname,
+        previous: e.detail
+          ? (window.location.previous = e.detail)
+          : window.location.previous
+      })
+    }
+
     var unwrap = wrapHistory(["pushState", "replaceState"])
 
     addEventListener("pushstate", handleLocationChange)
@@ -22,30 +47,5 @@ export var location = {
       removeEventListener("popstate", handleLocationChange)
       unwrap()
     }
-
-    function handleLocationChange(e) {
-      actions.set({
-        pathname: window.location.pathname,
-        previous: e.detail
-          ? (window.location.previous = e.detail)
-          : window.location.previous
-      })
-    }
   }
-}
-
-function wrapHistory(keys) {
-  return keys.reduce(function(next, key) {
-    var method = history[key]
-
-    history[key] = function(data, title, url) {
-      method.call(this, data, title, url)
-      dispatchEvent(new CustomEvent("pushstate", { detail: data }))
-    }
-
-    return function() {
-      history[key] = method
-      next && next()
-    }
-  }, null)
 }

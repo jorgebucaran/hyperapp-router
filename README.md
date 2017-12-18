@@ -1,8 +1,6 @@
 # @hyperapp/router
-[![Travis CI](https://img.shields.io/travis/hyperapp/router/master.svg)](https://travis-ci.org/hyperapp/router)
-[![Codecov](https://img.shields.io/codecov/c/github/hyperapp/router/master.svg)](https://codecov.io/gh/hyperapp/router)
-[![npm](https://img.shields.io/npm/v/@hyperapp/router.svg)](https://www.npmjs.org/package/hyperapp)
-[![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
+
+[![Travis CI](https://img.shields.io/travis/hyperapp/router/master.svg)](https://travis-ci.org/hyperapp/router) [![Codecov](https://img.shields.io/codecov/c/github/hyperapp/router/master.svg)](https://codecov.io/gh/hyperapp/router) [![npm](https://img.shields.io/npm/v/@hyperapp/router.svg)](https://www.npmjs.org/package/hyperapp) [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
 @hyperapp/router provides components for routing client-side pages with [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
 
@@ -10,11 +8,12 @@
 
 ```jsx
 import { h, app } from "hyperapp"
-import { location, Link, Route } from "@hyperapp/router"
+import { Link, Route, location } from "@hyperapp/router"
 
-const homeView = () => <h2>Home</h2>
-const aboutView = () => <h2>About</h2>
-const topicsView = ({ match }) => (
+const Home = () => <h2>Home</h2>
+const About = () => <h2>About</h2>
+const Topic = ({ match }) => <h3>{match.params.topicId}</h3>
+const TopicsView = ({ match }) => (
   <div>
     <h2>Topics</h2>
     <ul>
@@ -31,41 +30,43 @@ const topicsView = ({ match }) => (
 
     {match.isExact && <h3>Please select a topic.</h3>}
 
-    <Route parent path={`${match.path}/:topicId`} view={topicView} />
+    <Route parent path={`${match.path}/:topicId`} render={Topic} />
   </div>
 )
-const topicView = ({ match }) => <h3>{match.params.topicId}</h3>
 
-const actions = app({
-  state: {
-    location: location.state
-  },
-  actions: {
-    location: location.actions
-  },
-  view: state =>
-    <div>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/about">About</Link>
-        </li>
-        <li>
-          <Link to="/topics">Topics</Link>
-        </li>
-      </ul>
+const state = {
+  location: location.state
+}
 
-      <hr />
+const actions = {
+  location: location.actions
+}
 
-      <Route path="/" view={homeView} />
-      <Route path="/about" view={aboutView} />
-      <Route parent path="/topics" view={topicsView} />
-    </div>
-})
+const view = state => (
+  <div>
+    <ul>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/about">About</Link>
+      </li>
+      <li>
+        <Link to="/topics">Topics</Link>
+      </li>
+    </ul>
 
-location.subscribe(actions.location)
+    <hr />
+
+    <Route path="/" render={Home} />
+    <Route path="/about" render={About} />
+    <Route parent path="/topics" render={TopicsView} />
+  </div>
+)
+
+const main = app(state, actions, view, document.body)
+
+const unsubscribe = location.subscribe(main.location)
 ```
 
 ## Installation
@@ -79,7 +80,7 @@ Download the minified library from a [CDN](https://unpkg.com/@hyperapp/router).
 Then import from `router`.
 
 ```jsx
-const { location, Route, Link } = router
+const { Link, Route, location } = router
 ```
 
 Or install with npm / Yarn.
@@ -91,40 +92,46 @@ npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router<
 Then with a module bundler like [Rollup](https://github.com/rollup/rollup) or [Webpack](https://github.com/webpack/webpack), use as you would anything else.
 
 ```jsx
-import { location, Route, Link } from "@hyperapp/router"
+import { Link, Route, location } from "@hyperapp/router"
 ```
 
 ## Usage
 
-Add the `location` state and actions to your application.
+Wire the `location` state and actions to your application and subscribe
 
 ```jsx
-const actions = app({
-  state: {
-    location: location.state
-  },
-  actions: {
-    location: location.actions
-  }
-})
+const state = {
+  location: location.state
+}
+
+const actions = {
+  location: location.actions
+}
+
+const main = app(
+  state,
+  actions,
+  (state, actions) => <Route render={() => <h1>Hello!</h1>} />,
+  document.body
+)
 ```
 
 Then call `subscribe` to listen to location change events.
 
 ```js
-location.subscribe(actions.location)
+const unsubscribe = location.subscribe(main.location)
 ```
 
 ## Components
 
 ### Route
 
-Render some UI when the current [window location](https://developer.mozilla.org/en-US/docs/Web/API/Location) matches the given path. A route with no path always matches. Routes work as expected when nested inside other routes.
+Render a component when the given path matches the current [window location](https://developer.mozilla.org/en-US/docs/Web/API/Location). A route without a path is always a match. Routes can have nested routes.
 
 ```jsx
-<Route path="/" render={homeView} />
-<Route path="/about" render={aboutView} />
-<Route parent path="/topics" render={topicsView} />
+<Route path="/" render={Home} />
+<Route path="/about" render={About} />
+<Route parent path="/topics" render={TopicsView} />
 ```
 
 #### parent
@@ -137,46 +144,68 @@ The path to match against the current location.
 
 #### render
 
-The component to render when a match occurs.
+The component to render when there is a match.
 
-#### props
+### Render Props
 
 Rendered components are passed the following props.
 
-##### match.url
+```jsx
+const RouteInfo = ({ location, match }) => (
+  <div>
+    <h3>Url: {match.url}</h3>
+    <h3>Path: {match.path}</h3>
+    <ul>
+      {Object.keys(match.params).map(key => (
+        <li>
+          {key}: {match.params[key]}
+        </li>
+      ))}
+    </ul>
+    <h3>Location: {location.pathname}</h3>
+  </div>
+)
+```
 
-The matched part of the url. Use to assemble links inside routes. See Link.
+#### location
 
-##### match.path
+The [window location](https://developer.mozilla.org/en-US/docs/Web/API/Location).
 
-The route path. Same as path.
+#### match.url
 
-#####  match.isExact
+The matched part of the url. Use to assemble links inside routes. See [Link](#link).
 
-Indicates whether the given path matched the url exactly or not. I am still debating whether we need this or not.
+#### match.path
 
+The route [path](#path).
+
+#### match.isExact
+
+Indicates whether the given path matched the url exactly or not.
 
 ### Link
 
 Use the Link component to update the current [window location](https://developer.mozilla.org/en-US/docs/Web/API/Location) and navigate between views without a page reload. The new location will be pushed to the history stack using `history.pushState`.
 
 ```jsx
-<ul>
-  <li>
-    <Link to="/">Home</Link>
-  </li>
-  <li>
-    <Link to="/about">About</Link>
-  </li>
-  <li>
-    <Link to="/topics">Topics</Link>
-  </li>
-</ul>
+const Navigation = (
+  <ul>
+    <li>
+      <Link to="/">Home</Link>
+    </li>
+    <li>
+      <Link to="/about">About</Link>
+    </li>
+    <li>
+      <Link to="/topics">Topics</Link>
+    </li>
+  </ul>
+)
 ```
 
 #### to
 
-The link's destination.
+The link's destination url.
 
 ### Redirect
 
@@ -190,9 +219,7 @@ const Login = ({ from, login, redirectToReferrer }) => props => {
 
   return (
     <div>
-      <p>
-        You must log in to view the page at {from}.
-      </p>
+      <p>You must log in to view the page at {from}.</p>
       <button
         onclick={() => {
           auth.authenticate(userId => login(userId))
@@ -207,7 +234,7 @@ const Login = ({ from, login, redirectToReferrer }) => props => {
 
 #### to
 
-The redirect's destination.
+The redirect's destination url.
 
 #### from
 
@@ -218,15 +245,17 @@ Overwrite the previous pathname. See [location.previous](#previous).
 Use the Switch component when you want to ensure only one out of several routes is rendered. It always renders the first matching child.
 
 ```jsx
-<Switch>
-  <Route path="/" view={Home} />
-  <Route
-    path="/old-match"
-    view={() => <Redirect from="/old-match" to="/will-match" />}
-  />
-  <Route path="/will-match" view={WillMatch} />
-  <Route view={NoMatch} />
-</Switch>
+const NoMatchExample = (
+  <Switch>
+    <Route path="/" render={Home} />
+    <Route
+      path="/old-match"
+      render={() => <Redirect from="/old-match" to="/will-match" />}
+    />
+    <Route path="/will-match" render={WillMatch} />
+    <Route render={NoMatch} />
+  </Switch>
+)
 ```
 
 ## Modules
@@ -239,7 +268,7 @@ Same as window.location.pathname.
 
 #### previous
 
-The previous location.pathname. Useful when redirecting back to the referrer url/pathname after leaving a guarded/protected route.
+The previous location.pathname. Useful when redirecting back to the referrer url/pathname after leaving a protected route.
 
 #### go(url)
 
