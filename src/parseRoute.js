@@ -1,6 +1,20 @@
+function createMatch(isExact, path, url, params) {
+  return {
+    isExact: isExact,
+    path: path,
+    url: url,
+    params: params
+  }
+}
+
+function trimTrailingSlash(url) {
+  for (var len = url.length; "/" === url[--len]; );
+  return url.slice(0, len + 1)
+}
+
 export function parseRoute(path, url, options) {
-  if (path === url) {
-    return { isExact: true, url: url, path: url }
+  if (path === url || !path) {
+    return createMatch(path === url, path, url)
   }
 
   var exact = options && options.exact
@@ -24,15 +38,5 @@ export function parseRoute(path, url, options) {
     url += urls[i] + "/"
   }
 
-  return {
-    isExact: false,
-    path: path,
-    url: url.slice(0, -1),
-    params: params
-  }
-}
-
-function trimTrailingSlash(url) {
-  for (var len = url.length; "/" === url[--len]; );
-  return url.slice(0, len + 1)
+  return createMatch(false, path, url.slice(0, -1), params)
 }
