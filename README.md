@@ -2,7 +2,7 @@
 
 [![Travis CI](https://img.shields.io/travis/hyperapp/router/master.svg)](https://travis-ci.org/hyperapp/router) [![Codecov](https://img.shields.io/codecov/c/github/hyperapp/router/master.svg)](https://codecov.io/gh/hyperapp/router) [![npm](https://img.shields.io/npm/v/@hyperapp/router.svg)](https://www.npmjs.org/package/hyperapp) [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
-@hyperapp/router provides components for routing client-side pages with [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
+@hyperapp/router provides declarative routing for [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
 
 [Try it Online](http://hyperapp-router.surge.sh)
 
@@ -97,7 +97,7 @@ import { Link, Route, location } from "@hyperapp/router"
 
 ## Usage
 
-Wire the `location` state and actions to your application and subscribe
+Add the `location` module to your state and actions and start the application.
 
 ```jsx
 const state = {
