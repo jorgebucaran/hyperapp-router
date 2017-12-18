@@ -1,7 +1,7 @@
 {
   "name": "@hyperapp/router",
   "description": "Declarative routing for Hyperapp using the History API.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "dist/router.js",
   "jsnext:main": "src/index.js",
   "module": "src/index.js",
