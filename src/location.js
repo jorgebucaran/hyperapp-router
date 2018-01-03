@@ -1,51 +1,31 @@
-function wrapHistory(keys) {
-  return keys.reduce(function(next, key) {
-    var fn = history[key]
+import {locationProvider, hashProvider} from './locationProvider'
+import {createLink} from './createLink'
+import {createRoute} from './createRoute'
 
-    history[key] = function(data, title, url) {
-      fn.call(this, data, title, url)
-      dispatchEvent(new CustomEvent("pushstate", { detail: data }))
-    }
-
-    return function() {
-      history[key] = fn
-      next && next()
-    }
-  }, null)
+function createPreset(provider) {
+	return {
+		state: {
+			pathname: provider.get(),
+			previous: provider.get(),
+		},
+		actions: {
+			go: function(pathname) {
+				provider.go(pathname)
+			},
+			set: function(data) {
+				return data
+			},
+		},
+		subscribe: function(actions) {
+			return provider.subscribe(actions)
+		},
+	}
 }
-
-export var location = {
-  state: {
-    pathname: window.location.pathname,
-    previous: window.location.pathname
-  },
-  actions: {
-    go: function(pathname) {
-      history.pushState(null, "", pathname)
-    },
-    set: function(data) {
-      return data
-    }
-  },
-  subscribe: function(actions) {
-    function handleLocationChange(e) {
-      actions.set({
-        pathname: window.location.pathname,
-        previous: e.detail
-          ? (window.location.previous = e.detail)
-          : window.location.previous
-      })
-    }
-
-    var unwrap = wrapHistory(["pushState", "replaceState"])
-
-    addEventListener("pushstate", handleLocationChange)
-    addEventListener("popstate", handleLocationChange)
-
-    return function() {
-      removeEventListener("pushstate", handleLocationChange)
-      removeEventListener("popstate", handleLocationChange)
-      unwrap()
-    }
-  }
-}
+export var location = Object.assign(createPreset(locationProvider), {
+	Link: createLink(locationProvider),
+	Route: createRoute(locationProvider),
+})
+export var hash = Object.assign(createPreset(hashProvider), {
+	Link: createLink(hashProvider),
+	Route: createRoute(hashProvider),
+})
