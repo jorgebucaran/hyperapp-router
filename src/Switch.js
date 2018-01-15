@@ -1,3 +1,5 @@
 export function Switch(props, children) {
-  return children[0]
+  var i = 0
+  while (!children[i] && i < children.length) i++
+  return children[i]
 }
