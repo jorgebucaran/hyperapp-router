@@ -24,7 +24,7 @@
     "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn router -g hyperapp:hyperapp",
     "minify": "uglifyjs dist/router.js -o dist/router.js -mc pure_funcs=Object.defineProperty --source-map includeSources,url=router.js.map",
     "prepublish": "npm run build",
-    "format": "prettier --semi false --write \"src/**/*.js\"",
+    "format": "prettier --semi false --write \"src/**/*.js\" \"test/**/*.js\"",
     "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "babel": {
