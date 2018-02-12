@@ -8,19 +8,30 @@ interface LinkProps {
 export function Link(props: LinkProps): VNode<LinkProps>;
 
 /** Route */
-interface RouteProps {
-  parent: any;
+interface Match<P> {
+  url: string;
   path: string;
-  render: () => VNode<any>;
+  isExact: boolean;
+  params: P;
 }
-export function Route(props: RouteProps): any;
+interface RenderProps<P> {
+  location: Location;
+  match: Match<P>;
+}
 
+interface RouteProps {
+  parent?: boolean;
+  path: string;
+  render: (props: RenderProps<any>) => VNode<any>;
+}
+
+export function Route(props: RouteProps): any;
 /**Switch */
 export function Switch(props: any, children: VNode<any>): VNode<any>;
 
 /** Redirect */
 type RedirectProps = LinkProps;
-export function Redirect(props: RedirectProps): VNode<RedirectProps>;
+export function Redirect(props: RedirectProps): VNode<LinkProps>;
 
 /** location */
 interface LocationState {
