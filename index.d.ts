@@ -3,7 +3,7 @@ import { VNode } from "hyperapp";
 /** Link */
 interface LinkProps {
   to: string;
-  location?: LocationState;
+  location?: Location;
 }
 export function Link(props: LinkProps): VNode<LinkProps>;
 
@@ -15,19 +15,26 @@ interface Match<P> {
   params: P;
 }
 interface RenderProps<P> {
-  location: LocationState;
+  location: Location;
   match: Match<P>;
 }
 
-interface RouteProps {
+interface RouteProps<P> {
   parent?: boolean;
   path: string;
-  render: (props: RenderProps<object>) => VNode<object>;
+  location?: Location;
+  render: (props: RenderProps<P>) => VNode<RenderProps<P>>;
 }
 
-export function Route(props: RouteProps): VNode<object>;
+export function Route<P>(
+  props: RouteProps<P>
+): VNode<RenderProps<P>> | undefined;
+
 /**Switch */
-export function Switch(props: any, children: VNode<any>): VNode<any>;
+export function Switch<P>(
+  props: object,
+  children: Array<VNode<RouteProps<P>>>
+): VNode<object>;
 
 /** Redirect */
 type RedirectProps = LinkProps;
@@ -38,14 +45,15 @@ interface LocationState {
   pathname: string;
   previous: string;
 }
+
 interface LocationActions {
-  go: (pathname: string) => any;
-  set: (data: any) => any;
+  go: (pathname: string) => void;
+  set: (data: LocationState) => LocationState;
 }
-interface Location {
+interface RouterLocation {
   state: LocationState;
   actions: LocationActions;
   subscribe: (actions: LocationActions) => Function;
 }
 
-export declare const location: Location;
+export declare const location: RouterLocation;
