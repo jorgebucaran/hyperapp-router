@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "baseUrl": "../..",
+    "paths": {
+      "router": ["src", "index.d.ts"]
+    }
+  },
+  "include": ["*.ts", "*.tsx", "**/*.ts", "**/*.tsx"]
+}

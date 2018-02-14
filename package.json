@@ -21,7 +21,7 @@
     "history"
   ],
   "scripts": {
-    "test": "jest --coverage --no-cache",
+    "test": "jest --coverage --no-cache&& tsc -p test/ts",
     "build": "npm run bundle && npm run minify",
     "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn router -g hyperapp:hyperapp",
     "minify": "uglifyjs dist/router.js -o dist/router.js -mc pure_funcs=Object.defineProperty --source-map includeSources,url=router.js.map",
@@ -38,6 +38,7 @@
     "jest": "^21.2.1",
     "prettier": "^1.9.2",
     "rollup": "^0.52.0",
+    "typescript": "2.7.1",
     "uglify-js": "3.2.2"
   },
   "peerDependencies": {
