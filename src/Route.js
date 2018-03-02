@@ -6,11 +6,14 @@ export function Route(props) {
     exact: !props.parent
   })
 
-  return (
-    match &&
-    props.render({
-      match: match,
-      location: location
-    })
-  )
+  if (!match) return
+
+  var child = props.render({
+    match: match,
+    location: location
+  })
+
+  child.props.key = child.props.key || props.path
+
+  return child
 }
