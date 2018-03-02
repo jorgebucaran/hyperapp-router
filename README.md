@@ -4,7 +4,7 @@
 
 @hyperapp/router provides declarative routing for [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
 
-[Try it Online](http://hyperapp-router.surge.sh)
+[Try this example online](http://hyperapp-router.surge.sh).
 
 ```jsx
 import { h, app } from "hyperapp"
@@ -14,7 +14,7 @@ const Home = () => <h2>Home</h2>
 const About = () => <h2>About</h2>
 const Topic = ({ match }) => <h3>{match.params.topicId}</h3>
 const TopicsView = ({ match }) => (
-  <div>
+  <div key="topics">
     <h2>Topics</h2>
     <ul>
       <li>
