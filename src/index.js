@@ -1,5 +1,9 @@
-export { Link } from "./Link"
-export { Route } from "./Route"
 export { Switch } from "./Switch"
 export { Redirect } from "./Redirect"
-export { location } from "./location"
+export { location, hash } from "./location"
+
+import { locationProvider } from './locationProvider'
+import { createLink } from "./createLink"
+import { createRoute } from "./createRoute"
+export var Link = createLink(locationProvider)
+export var Route = createRoute(locationProvider)
