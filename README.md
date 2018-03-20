@@ -122,6 +122,10 @@ Then call `subscribe` to listen to location change events.
 const unsubscribe = location.subscribe(main.location)
 ```
 
+### State First
+
+By default, for convenience, the router use the `window.location` property as source of truth. If you want to ensure the router to use the state as only source of truth : you are responsible of providing the `state.location` to every router component you will use.
+
 ## Components
 
 ### Route
@@ -141,6 +145,10 @@ The route contains child routes.
 #### path
 
 The path to match against the current location.
+
+#### location
+
+The location property in the state. See [State first](#state-first).
 
 #### render
 
@@ -207,6 +215,10 @@ const Navigation = (
 
 The link's destination url.
 
+#### location
+
+The location property in the state. See [State first](#state-first).
+
 ### Redirect
 
 Use the Redirect component to navigate to a new location. The new location will override the current location in the history stack using `history.replaceState`.
@@ -239,6 +251,10 @@ The redirect's destination url.
 #### from
 
 Overwrite the previous pathname. See [location.previous](#previous).
+
+#### location
+
+The location property in the state. See [State first](#state-first).
 
 ### Switch
 
