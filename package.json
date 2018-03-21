@@ -30,6 +30,9 @@
   "babel": {
     "presets": "env"
   },
+  "jest": {
+    "testURL": "http://localhost"
+  },
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
     "hyperapp": "0.18.0",
