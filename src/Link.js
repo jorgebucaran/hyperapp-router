@@ -14,7 +14,7 @@ export function Link(props, children) {
         e.ctrlKey ||
         e.shiftKey ||
         props.target === "_blank" ||
-        location.origin && e.currentTarget.origin !== location.origin
+        (location.origin && e.currentTarget.origin !== location.origin)
       ) {
       } else {
         e.preventDefault()
