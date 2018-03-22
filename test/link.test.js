@@ -1,7 +1,11 @@
 import { h, app } from "hyperapp"
 import { Route, Link, location } from "../src"
 
-const fakeEvent = { button: 0,  currentTarget: { origin: window.location.origin }, preventDefault: () => {} }
+const fakeEvent = {
+  button: 0,
+  currentTarget: { origin: window.location.origin },
+  preventDefault: () => {}
+}
 
 test("redirect", done => {
   const state = {
@@ -15,30 +19,34 @@ test("redirect", done => {
   const main = app(
     state,
     actions,
-    (state, actions) => h("div", {}, [
-      h(Route, {
-        path: "/test",
-        render: () => { h(Link, {
-            to: "/done"
-          }).props.onclick(fakeEvent)
-        }
-      }),
-      h(Route, {
-        path: "/done",
-        render: () =>
-          h(
-            "h1",
-            {
-              oncreate() {
-                expect(document.body.innerHTML).toBe(`<div><h1>Hello</h1></div>`)
-                unsubscribe()
-                done()
-              }
-            },
-            "Hello"
-          )
-      })
-    ]),
+    (state, actions) =>
+      h("div", {}, [
+        h(Route, {
+          path: "/test",
+          render: () => {
+            h(Link, {
+              to: "/done"
+            }).props.onclick(fakeEvent)
+          }
+        }),
+        h(Route, {
+          path: "/done",
+          render: () =>
+            h(
+              "h1",
+              {
+                oncreate() {
+                  expect(document.body.innerHTML).toBe(
+                    `<div><h1>Hello</h1></div>`
+                  )
+                  unsubscribe()
+                  done()
+                }
+              },
+              "Hello"
+            )
+        })
+      ]),
     document.body
   )
 
