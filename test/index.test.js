@@ -15,6 +15,7 @@ test("router", done => {
     actions,
     (state, actions) =>
       h(Route, {
+        path: "/test",
         render: () =>
           h(
             "h1",
@@ -32,4 +33,6 @@ test("router", done => {
   )
 
   const unsubscribe = location.subscribe(main.location)
+
+  main.location.go("/test")
 })

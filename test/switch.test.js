@@ -10,4 +10,3 @@ test("Switch returns falsy when all children falsy", () => {
   const children = [0, "", false, null]
   expect(Switch(null, children)).toBeFalsy()
 })
-
