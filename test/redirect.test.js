@@ -1,7 +1,7 @@
 import { h, app } from "hyperapp"
 import { Route, Redirect, location } from "../src"
 
-test("redirect", done => {
+test("Redirect", done => {
   const state = {
     location: location.state
   }
@@ -46,4 +46,44 @@ test("redirect", done => {
   const unsubscribe = location.subscribe(main.location)
 
   main.location.go("/test")
+})
+
+test("Redirect without state/actions module", done => {
+  const state = {}
+
+  const actions = {}
+
+  const main = app(
+    state,
+    actions,
+    (state, actions) =>
+      h("div", {}, [
+        h(Route, {
+          path: "/test",
+          render: () =>
+            h(Redirect, {
+              to: "/done"
+            })
+        }),
+        h(Route, {
+          path: "/done",
+          render: () =>
+            h(
+              "h1",
+              {
+                oncreate() {
+                  expect(document.body.innerHTML).toBe(
+                    `<div><h1>Hello</h1></div>`
+                  )
+                  done()
+                }
+              },
+              "Hello"
+            )
+        })
+      ]),
+    document.body
+  )
+
+  history.pushState(null, "", "/test")
 })
