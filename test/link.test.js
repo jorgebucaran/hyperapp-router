@@ -54,3 +54,11 @@ test("redirect", done => {
 
   main.location.go("/test")
 })
+
+test("pass through attributes", () => {
+  const vnode = h(Link, { to: "/path", pass: "through", location })
+  expect(vnode.props.to).toBeUndefined()
+  expect(vnode.props.location).toBeUndefined()
+  expect(vnode.props.href).toEqual("/path")
+  expect(vnode.props.pass).toEqual("through")
+})

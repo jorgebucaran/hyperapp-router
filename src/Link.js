@@ -3,6 +3,8 @@ import { h } from "hyperapp"
 export function Link(props, children) {
   var to = props.to
   var location = props.location || window.location
+  delete props.to
+  delete props.location
 
   props.href = to
   props.onclick = function(e) {
