@@ -4,6 +4,8 @@ export function Link(props, children) {
   return function(state, actions) {
     var to = props.to
     var location = state.location || window.location
+    delete props.to
+    delete props.location
 
     props.href = to
     props.onclick = function(e) {

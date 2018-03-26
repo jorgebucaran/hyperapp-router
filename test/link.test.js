@@ -95,3 +95,11 @@ test("Link without state/actions module", done => {
 
   history.pushState(null, "", "/test")
 })
+
+test("pass through attributes", () => {
+  const vnode = h(Link, { to: "/path", pass: "through", location })({}, {})
+  expect(vnode.attributes.to).toBeUndefined()
+  expect(vnode.attributes.location).toBeUndefined()
+  expect(vnode.attributes.href).toEqual("/path")
+  expect(vnode.attributes.pass).toEqual("through")
+})
