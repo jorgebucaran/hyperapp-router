@@ -7,7 +7,7 @@ const fakeEvent = {
   preventDefault: () => {}
 }
 
-test("redirect", done => {
+test("Link", done => {
   const state = {
     location: location.state
   }
@@ -26,7 +26,7 @@ test("redirect", done => {
           render: () => {
             h(Link, {
               to: "/done"
-            }).props.onclick(fakeEvent)
+            })(state, actions).attributes.onclick(fakeEvent)
           }
         }),
         h(Route, {
@@ -55,10 +55,51 @@ test("redirect", done => {
   main.location.go("/test")
 })
 
+test("Link without state/actions module", done => {
+  const state = {}
+
+  const actions = {}
+
+  const main = app(
+    state,
+    actions,
+    (state, actions) =>
+      h("div", {}, [
+        h(Route, {
+          path: "/test",
+          render: () => {
+            h(Link, {
+              to: "/done"
+            })(state, actions).attributes.onclick(fakeEvent)
+          }
+        }),
+        h(Route, {
+          path: "/done",
+          render: () =>
+            h(
+              "h1",
+              {
+                oncreate() {
+                  expect(document.body.innerHTML).toBe(
+                    `<div><h1>Hello</h1></div>`
+                  )
+                  done()
+                }
+              },
+              "Hello"
+            )
+        })
+      ]),
+    document.body
+  )
+
+  history.pushState(null, "", "/test")
+})
+
 test("pass through attributes", () => {
-  const vnode = h(Link, { to: "/path", pass: "through", location })
-  expect(vnode.props.to).toBeUndefined()
-  expect(vnode.props.location).toBeUndefined()
-  expect(vnode.props.href).toEqual("/path")
-  expect(vnode.props.pass).toEqual("through")
+  const vnode = h(Link, { to: "/path", pass: "through", location })({}, {})
+  expect(vnode.attributes.to).toBeUndefined()
+  expect(vnode.attributes.location).toBeUndefined()
+  expect(vnode.attributes.href).toEqual("/path")
+  expect(vnode.attributes.pass).toEqual("through")
 })
