@@ -3,7 +3,6 @@
   "description": "Declarative routing for Hyperapp using the History API.",
   "version": "0.4.1",
   "main": "dist/router.js",
-  "jsnext:main": "src/index.js",
   "module": "src/index.js",
   "license": "MIT",
   "repository": "hyperapp/router",
@@ -21,8 +20,8 @@
   "scripts": {
     "test": "jest --coverage --no-cache",
     "build": "npm run bundle && npm run minify",
-    "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn router -g hyperapp:hyperapp",
-    "minify": "uglifyjs dist/router.js -o dist/router.js -mc pure_funcs=Object.defineProperty --source-map includeSources,url=router.js.map",
+    "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn hyperappRouter -g hyperapp:hyperapp",
+    "minify": "uglifyjs dist/router.js -o dist/router.js -mc pure_funcs=['Object.defineProperty'] --source-map includeSources,url=router.js.map",
     "prepublish": "npm run build",
     "format": "prettier --semi false --write 'src/**/*.js'",
     "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
@@ -35,13 +34,13 @@
   },
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
-    "hyperapp": "^1.2.1",
+    "hyperapp": "^1.2.5",
     "jest": "^22.4.3",
-    "prettier": "^1.9.2",
+    "prettier": "^1.11.1",
     "rollup": "^0.57.1",
     "uglify-js": "^3.3.16"
   },
   "peerDependencies": {
-    "hyperapp": "0.18.0"
+    "hyperapp": "1.2.5"
   }
 }

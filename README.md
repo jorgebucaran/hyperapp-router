@@ -1,8 +1,8 @@
-# @hyperapp/router
+# Hyperapp Router
 
 [![Travis CI](https://img.shields.io/travis/hyperapp/router/master.svg)](https://travis-ci.org/hyperapp/router) [![Codecov](https://img.shields.io/codecov/c/github/hyperapp/router/master.svg)](https://codecov.io/gh/hyperapp/router) [![npm](https://img.shields.io/npm/v/@hyperapp/router.svg)](https://www.npmjs.org/package/hyperapp) [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
-@hyperapp/router provides declarative routing for [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
+Hyperapp Router provides declarative routing for [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
 
 [Try this example online](http://hyperapp-router.surge.sh).
 
@@ -71,29 +71,17 @@ const unsubscribe = location.subscribe(main.location)
 
 ## Installation
 
-Download the minified library from a [CDN](https://unpkg.com/@hyperapp/router).
-
-```html
-<script src="https://unpkg.com/@hyperapp/router"></script>
-```
-
-Then import from `router`.
-
-```jsx
-const { Link, Route, location } = router
-```
-
-Or install with npm / Yarn.
-
 <pre>
 npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router</a>
 </pre>
 
-Then with a module bundler like [Rollup](https://github.com/rollup/rollup) or [Webpack](https://github.com/webpack/webpack), use as you would anything else.
+Then with a module bundler like Rollup or Webpack, use as you would anything else.
 
 ```jsx
-import { Link, Route, location } from "@hyperapp/router"
+import { Link, Route, Switch, Redirect, location } from "@hyperapp/router"
 ```
+
+If you don't want to set up a build environment, you can download Hyperapp Router from a CDN like [unpkg.com](https://unpkg.com/@hyperapp/router) and it will be globally available through the <samp>window.hyperappRouter</samp> object. We support all ES5-compliant browsers, including Internet Explorer 10 and above.
 
 ## Usage
 
@@ -122,10 +110,9 @@ Then call `subscribe` to listen to location change events.
 const unsubscribe = location.subscribe(main.location)
 ```
 
-
 ### State First
 
-By default, for convenience, the router use the `window.location` property as source of truth. If you want to ensure the router to use the state as only source of truth you are responsible of wiring the `location` slice to your `state` and `actions`. 
+By default, for convenience, the router use the `window.location` property as source of truth. If you want to ensure the router to use the state as only source of truth you are responsible of wiring the `location` slice to your `state` and `actions`.
 
 ## Components
 
@@ -281,4 +268,4 @@ Navigate to the given url.
 
 ## License
 
-@hyperapp/router is MIT licensed. See [LICENSE](LICENSE.md).
+Hyperapp Router is MIT licensed. See [LICENSE](LICENSE.md).
