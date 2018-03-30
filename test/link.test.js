@@ -103,3 +103,13 @@ test("pass through attributes", () => {
   expect(vnode.attributes.href).toEqual("/path")
   expect(vnode.attributes.pass).toEqual("through")
 })
+
+test("custom onclick handler", () => {
+  const event = { defaultPrevented: false }
+  const onclick = e => {
+    e.defaultPrevented = true
+  }
+  const vnode = h(Link, { to: "/path", onclick })({}, {})
+  vnode.attributes.onclick(event)
+  expect(event.defaultPrevented).toBe(true)
+})
