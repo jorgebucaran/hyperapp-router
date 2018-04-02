@@ -1,7 +1,7 @@
 {
   "name": "@hyperapp/router",
   "description": "Declarative routing for Hyperapp using the History API.",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "main": "dist/router.js",
   "module": "src/index.js",
   "license": "MIT",
