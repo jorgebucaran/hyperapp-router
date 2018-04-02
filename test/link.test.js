@@ -1,12 +1,6 @@
 import { h, app } from "hyperapp"
 import { Route, Link, location } from "../src"
 
-const fakeEvent = {
-  button: 0,
-  currentTarget: { origin: window.location.origin },
-  preventDefault: () => {}
-}
-
 test("Link", done => {
   const state = {
     location: location.state
@@ -21,14 +15,7 @@ test("Link", done => {
     actions,
     (state, actions) => (
       <div>
-        <Route
-          path="/test"
-          render={() =>
-            h(Link, {
-              to: "/done"
-            })(state, actions).attributes.onclick(fakeEvent)
-          }
-        />
+        <Route path="/test" render={() => <Link to="/done" />} />
         <Route
           path="/done"
           render={() => (
@@ -53,6 +40,12 @@ test("Link", done => {
   const unsubscribe = location.subscribe(main.location)
 
   main.location.go("/test")
+
+  setTimeout(() => {
+    document
+      .getElementsByTagName("a")[0]
+      .dispatchEvent(new MouseEvent("click", { button: 0 }))
+  }, 0)
 })
 
 test("pass through attributes", () => {
