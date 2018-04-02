@@ -3,7 +3,7 @@ import { h } from "hyperapp"
 export function Link(props, children) {
   return function(state, actions) {
     var to = props.to
-    var location = state.location || window.location
+    var location = state.location
     var onclick = props.onclick
     delete props.to
     delete props.location

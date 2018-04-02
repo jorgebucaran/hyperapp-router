@@ -110,10 +110,6 @@ Then call `subscribe` to listen to location change events.
 const unsubscribe = location.subscribe(main.location)
 ```
 
-### State First
-
-By default, for convenience, the router use the `window.location` property as source of truth. If you want to ensure the router to use the state as only source of truth you are responsible of wiring the `location` slice to your `state` and `actions`.
-
 ## Components
 
 ### Route
