@@ -19,34 +19,34 @@ test("Link", done => {
   const main = app(
     state,
     actions,
-    (state, actions) =>
-      h("div", {}, [
-        h(Route, {
-          path: "/test",
-          render: () => {
+    (state, actions) => (
+      <div>
+        <Route
+          path="/test"
+          render={() =>
             h(Link, {
               to: "/done"
             })(state, actions).attributes.onclick(fakeEvent)
           }
-        }),
-        h(Route, {
-          path: "/done",
-          render: () =>
-            h(
-              "h1",
-              {
-                oncreate() {
-                  expect(document.body.innerHTML).toBe(
-                    `<div><h1>Hello</h1></div>`
-                  )
-                  unsubscribe()
-                  done()
-                }
-              },
-              "Hello"
-            )
-        })
-      ]),
+        />
+        <Route
+          path="/done"
+          render={() => (
+            <h1
+              oncreate={() => {
+                expect(document.body.innerHTML).toBe(
+                  `<div><h1>Hello</h1></div>`
+                )
+                unsubscribe()
+                done()
+              }}
+            >
+              Hello
+            </h1>
+          )}
+        />
+      </div>
+    ),
     document.body
   )
 

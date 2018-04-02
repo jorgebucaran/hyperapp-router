@@ -13,22 +13,22 @@ test("Router", done => {
   const main = app(
     state,
     actions,
-    (state, actions) =>
-      h(Route, {
-        path: "/test",
-        render: () =>
-          h(
-            "h1",
-            {
-              oncreate() {
-                expect(document.body.innerHTML).toBe(`<h1>Hello</h1>`)
-                unsubscribe()
-                done()
-              }
-            },
-            "Hello"
-          )
-      }),
+    (state, actions) => (
+      <Route
+        path="/test"
+        render={() => (
+          <h1
+            oncreate={() => {
+              expect(document.body.innerHTML).toBe(`<h1>Hello</h1>`)
+              unsubscribe()
+              done()
+            }}
+          >
+            Hello
+          </h1>
+        )}
+      />
+    ),
     document.body
   )
 

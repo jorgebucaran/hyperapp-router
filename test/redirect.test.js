@@ -13,33 +13,27 @@ test("Redirect", done => {
   const main = app(
     state,
     actions,
-    (state, actions) =>
-      h("div", {}, [
-        h(Route, {
-          path: "/test",
-          render: () =>
-            h(Redirect, {
-              to: "/done"
-            })
-        }),
-        h(Route, {
-          path: "/done",
-          render: () =>
-            h(
-              "h1",
-              {
-                oncreate() {
-                  expect(document.body.innerHTML).toBe(
-                    `<div><h1>Hello</h1></div>`
-                  )
-                  unsubscribe()
-                  done()
-                }
-              },
-              "Hello"
-            )
-        })
-      ]),
+    (state, actions) => (
+      <div>
+        <Route path="/test" render={() => <Redirect to="/done" />} />
+        <Route
+          path="/done"
+          render={() => (
+            <h1
+              oncreate={() => {
+                expect(document.body.innerHTML).toBe(
+                  `<div><h1>Hello</h1></div>`
+                )
+                unsubscribe()
+                done()
+              }}
+            >
+              Hello
+            </h1>
+          )}
+        />
+      </div>
+    ),
     document.body
   )
 
