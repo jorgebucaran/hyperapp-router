@@ -72,6 +72,19 @@ test('Click Link with target="_blank"', async done => {
   done()
 })
 
+test("Click external Link", async done => {
+  const spy = jest.fn()
+  const view = () => <Link to="http://example.com/" />
+  const main = app(state, actions, view, document.body)
+  unsubscribe = location.subscribe(main.location)
+  await wait(0)
+  expect(main.getLocation().pathname).toEqual("/")
+  click(document.body.getElementsByTagName("a")[0])
+  await wait(0)
+  expect(main.getLocation().pathname).toEqual("/")
+  done()
+})
+
 test("Transition by clicking Link including non alphanumeric characters", async done => {
   const spy = jest.fn()
   const view = () => (

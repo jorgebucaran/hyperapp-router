@@ -1,5 +1,15 @@
 import { h } from "hyperapp"
 
+function getOrigin(loc) {
+  return loc.protocol + "//" + loc.hostname + (loc.port ? ":" + loc.port : "")
+}
+
+function isExternal(anchorElement) {
+  // Location.origin and HTMLAnchorElement.origin are not
+  // supported by IE and Safari.
+  return getOrigin(location) !== getOrigin(anchorElement)
+}
+
 export function Link(props, children) {
   return function(state, actions) {
     var to = props.to
@@ -21,7 +31,7 @@ export function Link(props, children) {
         e.ctrlKey ||
         e.shiftKey ||
         props.target === "_blank" ||
-        (location.origin && e.currentTarget.origin !== location.origin)
+        isExternal(e.currentTarget)
       ) {
       } else {
         e.preventDefault()
