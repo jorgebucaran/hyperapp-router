@@ -27,12 +27,24 @@
     "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "babel": {
-    "presets": "env"
+    "presets": [
+      "env"
+    ],
+    "plugins": [
+      [
+        "transform-react-jsx",
+        {
+          "pragma": "h"
+        }
+      ]
+    ]
   },
   "jest": {
     "testURL": "http://localhost"
   },
   "devDependencies": {
+    "babel-jest": "^22.4.3",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "hyperapp": "^1.2.5",
     "jest": "^22.4.3",
