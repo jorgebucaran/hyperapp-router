@@ -12,6 +12,14 @@ function trimTrailingSlash(url) {
   return url.slice(0, len + 1)
 }
 
+function decodeParam(val) {
+  try {
+    return decodeURIComponent(val)
+  } catch (e) {
+    return val
+  }
+}
+
 export function parseRoute(path, url, options) {
   if (path === url || !path) {
     return createMatch(path === url, path, url)
@@ -27,11 +35,7 @@ export function parseRoute(path, url, options) {
 
   for (var i = 0, params = {}, len = paths.length, url = ""; i < len; i++) {
     if (":" === paths[i][0]) {
-      try {
-        params[paths[i].slice(1)] = urls[i] = decodeURI(urls[i])
-      } catch (_) {
-        continue
-      }
+      params[paths[i].slice(1)] = urls[i] = decodeParam(urls[i])
     } else if (paths[i] !== urls[i]) {
       return
     }

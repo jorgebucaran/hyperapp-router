@@ -1,4 +1,6 @@
 export function Redirect(props) {
-  var location = props.location || window.location
-  history.replaceState(props.from || location.pathname, "", props.to)
+  return function(state, actions) {
+    var location = state.location
+    history.replaceState(props.from || location.pathname, "", props.to)
+  }
 }
