@@ -6,8 +6,11 @@
     "jsxFactory": "h",
     "baseUrl": "../..",
     "paths": {
-      "router": ["src", "index.d.ts"]
-    }
+      "router": ["src", "index.d.ts"],
+      "hyperapp": ["./node_modules/hyperapp/hyperapp.d.ts"]
+
+    },
+    "target": "es6"
   },
   "include": ["*.ts", "*.tsx", "**/*.ts", "**/*.tsx"]
 }
