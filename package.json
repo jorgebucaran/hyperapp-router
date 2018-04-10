@@ -52,7 +52,8 @@
     "jest": "^22.4.3",
     "prettier": "^1.11.1",
     "rollup": "^0.57.1",
-    "uglify-js": "^3.3.16"
+    "uglify-js": "^3.3.16",
+    "typescript": "2.8.1"
   },
   "peerDependencies": {
     "hyperapp": "1.2.5"
