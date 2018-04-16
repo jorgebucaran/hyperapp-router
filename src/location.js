@@ -16,12 +16,16 @@ function wrapHistory(keys) {
 
 export var location = {
   state: {
-    pathname: window.location.pathname,
-    previous: window.location.pathname
+    pathname: typeof window === 'undefined' ? '' : window.location.pathname,
+    previous: typeof window === 'undefined' ? '' : window.location.pathname
   },
   actions: {
     go: function(pathname) {
-      history.pushState(null, "", pathname)
+      return function(state, actions) {
+        typeof history === 'undefined'
+          ? actions.set({ pathname: pathname, previous: state.pathname })
+          : history.pushState(null, "", pathname)
+      }
     },
     set: function(data) {
       return data
