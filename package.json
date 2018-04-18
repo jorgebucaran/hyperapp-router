@@ -18,7 +18,7 @@
     "history"
   ],
   "scripts": {
-    "test": "jest --coverage --no-cache",
+    "test": "jest --coverage --no-cache --collectCoverageFrom=src/**/*.js --collectCoverageFrom=!src/CustomEvent.js",
     "build": "npm run bundle && npm run minify",
     "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn hyperappRouter -g hyperapp:hyperapp",
     "minify": "uglifyjs dist/router.js -o dist/router.js -mc pure_funcs=['Object.defineProperty'] --source-map includeSources,url=router.js.map",
