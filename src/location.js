@@ -1,3 +1,5 @@
+import { CustomEvent } from "./CustomEvent"
+
 function wrapHistory(keys) {
   return keys.reduce(function(next, key) {
     var fn = history[key]
