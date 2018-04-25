@@ -8,11 +8,11 @@ export function Route(props) {
       props.basepath += "/";
     }
     // Remove basepath from path
-    if(~props.path.indexOf(props.basepath)){
+    if(props.path && ~props.path.indexOf(props.basepath)){
       props.path = props.path.split(props.basepath)[1];
     }
     // Remove basepath from url
-    if(~location.pathname.indexOf(props.basepath)){
+    if(location.pathname && ~location.pathname.indexOf(props.basepath)){
       location.pathname = location.pathname.split(props.basepath)[1];
     }
     var match = parseRoute(props.path, location.pathname, {
