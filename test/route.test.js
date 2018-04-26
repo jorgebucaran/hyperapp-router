@@ -8,7 +8,7 @@ test("Route returns falsy if it doesn't match to current location", () => {
   const state = { location: { pathname: "/articles" } }
   const actions = {}
   const render = jest.fn()
-  expect(Route({ path: "/users", render }, [])(state, actions)).toBeFalsy()
+  expect(Route({ path: "/users" }, [render])(state, actions)).toBeFalsy()
   expect(render).not.toBeCalled()
 })
 
@@ -20,7 +20,7 @@ test("Route returns result of render prop if it exactly matches to current locat
     expect(match.isExact).toBe(true)
     return "result"
   })
-  expect(Route({ path: "/users", render }, [])(state, actions)).toEqual(
+  expect(Route({ path: "/users" }, [render])(state, actions)).toEqual(
     "result"
   )
   expect(render).toBeCalled()
@@ -35,7 +35,7 @@ test("Route returns result of render prop if it matches to current location", ()
     expect(match.params).toEqual({ id: "1" })
     return "result"
   })
-  expect(Route({ path: "/users/:id", render }, [])(state, actions)).toEqual(
+  expect(Route({ path: "/users/:id" }, [render])(state, actions)).toEqual(
     "result"
   )
   expect(render).toBeCalled()
@@ -43,8 +43,8 @@ test("Route returns result of render prop if it matches to current location", ()
 
 test("Route without path prop matches to every location", () => {
   const render = () => true
-  expect(Route({ render }, [])({ location: { pathname: "/" } })).toBe(true)
-  expect(Route({ render }, [])({ location: { pathname: "/users" } })).toBe(true)
+  expect(Route({}, [render])({ location: { pathname: "/" } })).toBe(true)
+  expect(Route({}, [render])({ location: { pathname: "/users" } })).toBe(true)
 })
 
 test("Route decodes encoded URI", () => {
@@ -54,7 +54,7 @@ test("Route decodes encoded URI", () => {
   const render = ({ match }) => {
     expect(match.params).toEqual({ foo: "café", bar: "baz" })
   }
-  Route({ path: "/foo/:foo/bar/:bar", render }, [])(state, actions)
+  Route({ path: "/foo/:foo/bar/:bar" }, [render])(state, actions)
 })
 
 test("Route ignores url params containing invalid character sequences", () => {
@@ -67,6 +67,6 @@ test("Route ignores url params containing invalid character sequences", () => {
     expect(match.params).toEqual({ foo: invalid, bar: "baz" })
   }
   expect(() =>
-    Route({ path: "/foo/:foo/bar/:bar", render }, [])(state, actions)
+    Route({ path: "/foo/:foo/bar/:bar" }, [render])(state, actions)
   ).not.toThrowError()
 })
