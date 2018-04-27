@@ -246,15 +246,15 @@ const NoMatchExample = (
     <Route path="/">
       <Home/>
     </Route>
-    <Route path="/old-match"/>
+    <Route path="/old-match">
       {() => <Redirect from="/old-match" to="/will-match" />}
     </Route>
     <Route path="/will-match">
       <WillMatch/>
-    </Router>
+    </Route>
     <Route>
       <NoMatch/>
-    </Router>
+    </Route>
   </Switch>
 )
 ```
