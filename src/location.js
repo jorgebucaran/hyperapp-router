@@ -3,7 +3,7 @@ function wrapHistory(keys) {
     var fn = history[key]
 
     // Do not wrap if it's already wrapped
-    if(history[key].toString().indexOf(`CustomEvent("pushstate"`) !== -1){
+    if(history[key].toString().indexOf('CustomEvent("pushstate"') !== -1){
       return function(){};
     }
     
