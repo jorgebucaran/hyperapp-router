@@ -1,7 +1,10 @@
 import { h } from "hyperapp"
 
 function getOrigin(loc) {
-  return loc.protocol + "//" + loc.hostname + (loc.port ? ":" + loc.port : "")
+  var protocol = (loc.protocol && ':' !== loc.protocol) ? loc.protocol : location.protocol
+  var host = [loc.hostname, loc.port].filter(Boolean).join(":")
+      || [location.hostname, location.port].filter(Boolean).join(":")
+  return protocol + "//" + host
 }
 
 function isExternal(anchorElement) {
