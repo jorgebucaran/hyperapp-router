@@ -4,7 +4,7 @@ function wrapHistory(keys) {
 
     history[key] = function(data, title, url) {
       fn.call(this, data, title, url)
-      dispatchEvent(createCustomEvent("pushstate", data))
+      dispatchEvent(new CustomEvent("pushstate", { detail: data }))
     }
 
     return function() {
@@ -13,17 +13,6 @@ function wrapHistory(keys) {
     }
   }, null)
 }
-
-var createCustomEvent = "object" === typeof CustomEvent
-    ? function (target, data) {
-      // `new CustomEvent` is not supported by IE
-      var event  = document.createEvent("CustomEvent")
-      event.initCustomEvent(target, false, false, data)
-      return event
-    }
-    : function (target, data) {
-      return new CustomEvent(target, { detail: data })
-    }
 
 export var location = {
   state: {
