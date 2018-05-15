@@ -1,11 +1,11 @@
 {
-  "name": "@hyperapp/router",
+  "name": "hyperapp-patched-router",
   "description": "Declarative routing for Hyperapp using the History API.",
   "version": "0.7.0",
   "main": "dist/router.js",
   "module": "src/index.js",
   "license": "MIT",
-  "repository": "hyperapp/router",
+  "repository": "kidandcat/router",
   "files": [
     "src",
     "dist"
