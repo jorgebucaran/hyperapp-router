@@ -2,6 +2,11 @@ function wrapHistory(keys) {
   return keys.reduce(function(next, key) {
     var fn = history[key]
 
+    // Do not wrap if it's already wrapped
+    if(history[key].toString().indexOf('CustomEvent("pushstate"') !== -1){
+      return function(){};
+    }
+    
     history[key] = function(data, title, url) {
       fn.call(this, data, title, url)
       dispatchEvent(new CustomEvent("pushstate", { detail: data }))
@@ -41,6 +46,8 @@ export var location = {
 
     addEventListener("pushstate", handleLocationChange)
     addEventListener("popstate", handleLocationChange)
+    // Trigger actions.set
+    handleLocationChange({detail: null});
 
     return function() {
       removeEventListener("pushstate", handleLocationChange)
