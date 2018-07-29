@@ -28,7 +28,7 @@ interface RouteProps<P> {
 
 export function Route<P>(
   props: RouteProps<P>
-): VNode<RenderProps<P>> | undefined;
+): VNode<RenderProps<P>> | void;
 
 /**Switch */
 export function Switch<P>(
@@ -37,7 +37,9 @@ export function Switch<P>(
 ): VNode<object>;
 
 /** Redirect */
-type RedirectProps = LinkProps;
+interface RedirectProps extends LinkProps {
+  from?: string
+}
 export function Redirect(props: RedirectProps): VNode<RedirectProps>;
 
 /** location */
@@ -48,7 +50,6 @@ interface LocationState {
 
 interface LocationActions {
   go: (pathname: string) => void;
-  set: (data: LocationState) => LocationState;
 }
 interface RouterLocation {
   state: LocationState;
