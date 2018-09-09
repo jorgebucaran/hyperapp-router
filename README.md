@@ -200,7 +200,7 @@ The link's destination url.
 Use the Redirect component to navigate to a new location. The new location will override the current location in the history stack using `history.replaceState`.
 
 ```jsx
-const Login = ({ from, login, redirectToReferrer }) => props => {
+const Login = ({ from, login, redirectToReferrer }) => {
   if (redirectToReferrer) {
     return <Redirect to={from} />
   }
