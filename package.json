@@ -4,11 +4,13 @@
   "version": "0.7.0",
   "main": "dist/router.js",
   "module": "src/index.js",
+  "typings": "index.d.ts",
   "license": "MIT",
   "repository": "hyperapp/router",
   "files": [
     "src",
-    "dist"
+    "dist",
+    "index.d.ts"
   ],
   "author": "Jorge Bucaran",
   "keywords": [
@@ -18,7 +20,7 @@
     "history"
   ],
   "scripts": {
-    "test": "jest --coverage --no-cache",
+    "test": "jest --coverage --no-cache&& tsc -p test/ts",
     "build": "npm run bundle && npm run minify",
     "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn hyperappRouter -g hyperapp:hyperapp",
     "minify": "uglifyjs dist/router.js -o dist/router.js -mc pure_funcs=['Object.defineProperty'] --source-map includeSources,url=router.js.map",
@@ -50,7 +52,8 @@
     "jest": "^22.4.3",
     "prettier": "^1.11.1",
     "rollup": "^0.57.1",
-    "uglify-js": "^3.3.16"
+    "uglify-js": "^3.3.16",
+    "typescript": "2.8.1"
   },
   "peerDependencies": {
     "hyperapp": "1.2.5"
