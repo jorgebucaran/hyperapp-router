@@ -21,7 +21,7 @@ afterEach(() => {
 
 test("Transition by location.go()", async done => {
   const spy = jest.fn()
-  const view = () => <Route path="/test" render={spy} />
+  const view = () => <Route path="/test">{spy}</Route>
   const main = app(state, actions, view, document.body)
   unsubscribe = location.subscribe(main.location)
   await wait(0)
@@ -37,7 +37,7 @@ test("Transition by clicking Link", async done => {
   const view = () => (
     <div>
       <Link to="/test" />
-      <Route path="/test" render={spy} />
+      <Route path="/test">{spy}</Route>
     </div>
   )
   const main = app(state, actions, view, document.body)
@@ -60,7 +60,7 @@ test('Click Link with target="_blank"', async done => {
   const view = () => (
     <div>
       <Link to="/test" target="_blank" />
-      <Route path="/test" render={spy} />
+      <Route path="/test">{spy}</Route>
     </div>
   )
   const main = app(state, actions, view, document.body)
@@ -90,7 +90,7 @@ test("Transition by clicking Link including non alphanumeric characters", async 
   const view = () => (
     <div>
       <Link to="/test/café" />
-      <Route path="/test/:id" render={spy} />
+      <Route path="/test/:id">{spy}</Route>
     </div>
   )
   const main = app(state, actions, view, document.body)
@@ -109,8 +109,8 @@ test("Transition by rendering Redirect", async done => {
   const spy = jest.fn()
   const view = () => (
     <div>
-      <Route path="/test" render={() => <Redirect to="/somewhere" />} />
-      <Route path="/somewhere" render={spy} />
+      <Route path="/test">{() => <Redirect to="/somewhere" />}</Route>
+      <Route path="/somewhere">{spy}</Route>
     </div>
   )
   const main = app(state, actions, view, document.body)

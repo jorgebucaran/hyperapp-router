@@ -58,9 +58,15 @@ const view = state => (
 
     <hr />
 
-    <Route path="/" render={Home} />
-    <Route path="/about" render={About} />
-    <Route parent path="/topics" render={TopicsView} />
+    <Route path="/">
+      <Home/>
+    </Route>
+    <Route path="/about">
+      <About/>
+    </Route>
+    <Route parent path="/topics">
+      <TopicsView/>
+    </Route>
   </div>
 )
 
@@ -99,7 +105,7 @@ const actions = {
 const main = app(
   state,
   actions,
-  (state, actions) => <Route render={() => <h1>Hello!</h1>} />,
+  (state, actions) => <Route>{() => <h1>Hello!</h1>}</Route>,
   document.body
 )
 ```
@@ -117,9 +123,15 @@ const unsubscribe = location.subscribe(main.location)
 Render a component when the given path matches the current [window location](https://developer.mozilla.org/en-US/docs/Web/API/Location). A route without a path is always a match. Routes can have nested routes.
 
 ```jsx
-<Route path="/" render={Home} />
-<Route path="/about" render={About} />
-<Route parent path="/topics" render={TopicsView} />
+<Route path="/">
+  <Home/>
+</Route>
+<Route path="/about">
+  <About/>
+</Route>
+<Route parent path="/topics">
+  <TopicsView/>
+</Route>
 ```
 
 #### parent
@@ -130,13 +142,9 @@ The route contains child routes.
 
 The path to match against the current location.
 
-#### render
+### Render Child function
 
-The component to render when there is a match.
-
-### Render Props
-
-Rendered components are passed the following props.
+Child rendered components are passed the following props.
 
 ```jsx
 const RouteInfo = ({ location, match }) => (
@@ -235,13 +243,18 @@ Use the Switch component when you want to ensure only one out of several routes 
 ```jsx
 const NoMatchExample = (
   <Switch>
-    <Route path="/" render={Home} />
-    <Route
-      path="/old-match"
-      render={() => <Redirect from="/old-match" to="/will-match" />}
-    />
-    <Route path="/will-match" render={WillMatch} />
-    <Route render={NoMatch} />
+    <Route path="/">
+      <Home/>
+    </Route>
+    <Route path="/old-match">
+      {() => <Redirect from="/old-match" to="/will-match" />}
+    </Route>
+    <Route path="/will-match">
+      <WillMatch/>
+    </Route>
+    <Route>
+      <NoMatch/>
+    </Route>
   </Switch>
 )
 ```
