@@ -5,7 +5,7 @@ interface LinkProps {
   to: string;
   location?: Location;
 }
-export function Link(props: LinkProps): VNode<LinkProps>;
+export function Link(props: LinkProps): VNode<LinkProps> | any;
 
 /** Route */
 interface Match<P> {
@@ -28,7 +28,7 @@ interface RouteProps<P> {
 
 export function Route<P>(
   props: RouteProps<P>
-): VNode<RenderProps<P>> | void;
+): VNode<RenderProps<P>> | any;
 
 /**Switch */
 export function Switch<P>(
