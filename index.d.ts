@@ -4,7 +4,7 @@ import { VNode } from "hyperapp";
 interface LinkProps {
   to: string;
   location?: Location;
-  class?: string;
+  [attributeName: string]: any
 }
 export function Link(props: LinkProps): VNode<LinkProps>;
 
