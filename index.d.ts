@@ -21,7 +21,7 @@ interface RenderProps<P> {
 
 interface RouteProps<P> {
   parent?: boolean;
-  path: string;
+  path?: string;
   location?: Location;
   render: (props: RenderProps<P>) => VNode<RenderProps<P>>;
 }

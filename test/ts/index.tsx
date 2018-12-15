@@ -70,6 +70,7 @@ const view: View<RouteState, RouteActions> = (state: RouteState) => (
       <Route parent path="/topics" render={TopicsView} />
       <Route path="/" render={Home} />
       <Route path="/about" render={About} />
+      <Route render={Home} />
     </Switch>
     <hr />
     <Route path="/" render={Home} />
