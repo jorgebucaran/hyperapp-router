@@ -28,7 +28,7 @@ interface RouteProps<P> {
 
 export function Route<P>(
   props: RouteProps<P>
-): VNode<RenderProps<P>> | void;
+): VNode<RenderProps<P>> | null;
 
 /**Switch */
 export function Switch<P>(
