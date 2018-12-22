@@ -1,5 +1,5 @@
-export { Link } from "./Link"
-export { Route } from "./Route"
-export { Switch } from "./Switch"
-export { Redirect } from "./Redirect"
-export { location } from "./location"
+export { location } from './location'
+export { history } from './history'
+export { Switch } from './Switch'
+export { Route } from './Route'
+export { Link } from './Link'
