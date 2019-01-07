@@ -1,27 +1,25 @@
 import { h } from 'hyperapp'
-import { location } from './location'
+import { location } from './index'
 
-function onClick(state, link, e){
-  if(
+const onClick = (state, link, e) => {
+  const { pathname } = state.location
+  if(!(
     e.defaultPrevented ||
     e.button !== 0 ||
     e.altKey ||
     e.metaKey ||
     e.ctrlKey ||
     e.shiftKey ||
-    e.target.getAttribute("target") === "_blank" ||
-    link.href === state.location.pathname
-  ){
-    return state
-  } else {
+    e.target.getAttribute('target') === '_blank'
+  )){
     e.preventDefault()
-    return location(state, link.href)
-  }
+    return link.to !== pathname
+      ? [location, link.to] : state
+  } else return state
 }
 
-export function Link(props, childrens){
+export const Link = (props, children) => {
   props.onClick = props.onClick || [ onClick, props ]
   props.href = props.to
-  delete props.to
-  return h('a', props, childrens)
+  return h('a', props, children)
 }

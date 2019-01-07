@@ -50,6 +50,7 @@
     "babel-preset-env": "^1.6.1",
     "hyperapp": "^2.0.0",
     "jest": "^22.4.3",
+    "path-to-regexp": "^2.4.0",
     "prettier": "^1.11.1",
     "rollup": "^0.57.1",
     "uglify-js": "^3.3.16",
