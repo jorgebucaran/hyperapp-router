@@ -26,7 +26,7 @@ export const Route = (context, child) => {
     context,
     path,
     url
-  }}, (props, ...args) => Route.call(this, {
+  }}, (props, ...args) => Route.call(undefined, {
     ...context, ...props,
     render: props.render || undefined,
     path: path + (props.path || ''),
