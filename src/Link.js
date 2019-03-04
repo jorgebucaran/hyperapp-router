@@ -10,7 +10,7 @@ const onClick = (state, link, e) => {
     e.metaKey ||
     e.ctrlKey ||
     e.shiftKey ||
-    e.target.getAttribute('target') === '_blank'
+    e.currentTarget.getAttribute('target') === '_blank'
   )){
     e.preventDefault()
     return link.to !== pathname
