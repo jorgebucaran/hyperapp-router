@@ -1,4 +1,4 @@
-import { VNode } from "hyperapp";
+import { Component, VNode } from "hyperapp";
 
 /** Link */
 interface LinkProps {
@@ -23,7 +23,7 @@ interface RouteProps<P> {
   parent?: boolean;
   path?: string;
   location?: Location;
-  render: (props: RenderProps<P>) => VNode<RenderProps<P>>;
+  render: Component<RenderProps<P>>;
 }
 
 export function Route<P>(
