@@ -1,11 +1,11 @@
-import { VNode } from "hyperapp";
+import { Children, VNode } from "hyperapp";
 
 /** Link */
 interface LinkProps {
   to: string;
   location?: Location;
 }
-export function Link(props: LinkProps): VNode<LinkProps>;
+export function Link(props: LinkProps, children: Children): VNode<LinkProps>;
 
 /** Route */
 interface Match<P> {
