@@ -2,6 +2,7 @@ import { Children, VNode } from "hyperapp";
 
 /** Link */
 interface LinkProps {
+  class?: string;
   to: string;
   location?: Location;
   [attributeName: string]: any
