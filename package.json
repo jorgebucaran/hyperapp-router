@@ -21,41 +21,41 @@
   ],
   "scripts": {
     "test": "jest --coverage --no-cache&& tsc -p test/ts",
-    "build": "npm run bundle && npm run minify",
-    "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn hyperappRouter -g hyperapp:hyperapp",
-    "minify": "uglifyjs dist/router.js -o dist/router.js -mc pure_funcs=['Object.defineProperty'] --source-map includeSources,url=router.js.map",
+    "build": "parcel build ./src/index.js --out-dir dist --out-file router.js --global hyperappRouter --no-autoinstall",
     "prepublish": "npm run build",
+    "prepare": "npm run build",
     "format": "prettier --semi false --write '{src,test}/**/*.js'",
     "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "babel": {
     "presets": [
-      "env"
-    ],
-    "plugins": [
       [
-        "transform-react-jsx",
+        "@babel/preset-env",
         {
-          "pragma": "h"
+          "forceAllTransforms": true
         }
       ]
+    ],
+    "plugins": [
+      "@babel/plugin-transform-runtime"
     ]
   },
   "jest": {
     "testURL": "http://localhost"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
     "babel-jest": "^22.4.3",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.6.1",
-    "hyperapp": "^1.2.5",
+    "hyperapp": "github:jorgebucaran/hyperapp#V2",
     "jest": "^22.4.3",
+    "parcel-bundler": "^1.11.0",
+    "path-to-regexp": "^2.4.0",
     "prettier": "^1.11.1",
-    "rollup": "^0.57.1",
-    "uglify-js": "^3.3.16",
     "typescript": "2.8.1"
   },
   "peerDependencies": {
-    "hyperapp": "1.2.5"
+    "hyperapp": "2.0.0"
   }
 }

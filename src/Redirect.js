@@ -1,6 +1,12 @@
-export function Redirect(props) {
-  return function(state, actions) {
-    var location = state.location
-    history.replaceState(props.from || location.pathname, "", props.to)
-  }
+import { location, Route } from './index'
+
+const fake = () => () => {}
+export const Redirect = (props) => {
+  const { from, to } = props
+  const render = typeof to === 'function' ? to : () => to
+  const match = Route({...props, path: from, render })
+  return { effect: match ? (props, dispatch) => {
+    dispatch([location, match])
+    return () => {}
+  } : fake }
 }
